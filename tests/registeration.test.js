@@ -1,12 +1,12 @@
 import request from "supertest";
-import app from "../index.js";
+import app  from "../index.js";
 
-import env from "dotenv";
-env.config();
+import env from "dotenv"
+ env.config()
 
 describe("POST /users/register", () => {
   describe("given a username, email and password", () => {
-    const url = `${process.env.BASE_URL} /users/register`;
+    const url = `${process.env.BASE_URL}/users/register`;
     // all is well
     it("should respond with status code 201", async () => {
       const response = await request(app).post(url).send({
@@ -14,6 +14,9 @@ describe("POST /users/register", () => {
         email: "test@mail.com",
         password: "Password@123",
       });
+    //   expect(email).toMatch(/^\S+@\S+\.\S+$/);
+    //   expect(password).toMatch(/^ (?=.* [A - Z])(?=.* [a - z])(?=.*\d).+ $/);
+    //   expect(password.length).toBeGreaterThan(8);
       expect(response.statusCode).toBe(201);
     });
 
@@ -30,7 +33,9 @@ describe("POST /users/register", () => {
         ];
 
         for (const testCase of possibleResponses) {
-          const response = await request(app).post(url).send(testCase);
+          const response = await request(app)
+            .post(url)
+            .send(testCase);
           expect(response.statusCode).toBe(400);
         }
       });
@@ -53,6 +58,7 @@ describe("POST /users/register", () => {
           email: "test@mail.com",
           password: "Password123",
         });
+        //expect(username.length).toBeLessThan(3);
         expect(response.statusCode).toBe(400);
       });
 
@@ -63,6 +69,9 @@ describe("POST /users/register", () => {
           email: "test@mail.com",
           password: "Password123",
         });
+        // expect(password).not.toMatch(
+        //   /^ (?=.* [A - Z])(?=.* [a - z])(?=.*\d).+ $/,
+        // );
         expect(response.statusCode).toBe(400);
       });
     });
@@ -74,26 +83,28 @@ describe("POST /users/register", () => {
         email: "testmail.com",
         password: "Password123",
       });
+      //expect(email).not.toMatch(/^\S+@\S+\.\S+$/);
       expect(response.statusCode).toBe(400);
     });
 
     describe("Duplicate field", () => {
+      
       it("email is already taken -> 409", async () => {
         const existingEmail = "chat@sphere.com";
         const response1 = await request(app).post(url).send({
-          username: "test",
-          email: existingEmail,
-          password: "Password123",
-        });
-        if (response1.statusCode === 201) {
-          const response2 = await request(app).post(url).send({
             username: "test",
             email: existingEmail,
             password: "Password123",
           });
-          expect(response2.statusCode).toBe(409);
+        if(response1.statusCode === 201){
+            const response2 = await request(app).post(url).send({
+                username: "test",
+                email: existingEmail,
+                password: "Password123",
+              });
+              expect(response2.statusCode).toBe(409);
         }
-        expect(response1.statusCode).not.toBe(201);
+        expect(response1.statusCode).not.toBe(201)
       });
     });
   });
