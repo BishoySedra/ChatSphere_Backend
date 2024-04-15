@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 import authRoutes from "./src/routes/auth.js";
 import errorHandler from "./src/middlewares/errors/errorHandler.js";
 import connectDB from "./src/db/connection.js";
-import cors from "cors"
+import cors from "cors";
+
+import { configureEnviromentVariable } from "./src/helpers/enviroment.js"
 
 // Load environment variables
 dotenv.config();
@@ -25,7 +27,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
 // Parse JSON bodies (as sent by API clients)
 app.use(Express.json());
 
@@ -33,11 +34,13 @@ app.use(Express.json());
 app.use(`${process.env.BASE_URL}/users`, authRoutes);
 app.use(errorHandler);
 
+
 try {
   const port = process.env.PORT || 3000;
   app.listen(port, () => {
-    connectDB();
-    console.log(`Server is running on port ${port}`);
+    let env = configureEnviromentVariable()
+    connectDB(env);
+    console.log(`Server listening on port ${port}`);
   });
 } catch (error) {
   console.log(error);
