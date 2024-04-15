@@ -25,7 +25,7 @@ export const registerSchema = Joi.object({
       "string.base": "Password must be a string",
       "string.empty": "Password cannot be empty",
       "string.pattern.base":
-        "Password must have at least one lowercase letter, one uppercase letter, one number, and one special character",
+        "Password must have at least length of 8, have at least one lowercase letter, one uppercase letter, one number, and one special character",
       "any.required": "Password is required",
     }),
 });
