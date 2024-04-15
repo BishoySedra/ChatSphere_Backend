@@ -14,9 +14,6 @@ describe("POST /users/register", () => {
         email: "test@mail.com",
         password: "Password@123",
       });
-    //   expect(email).toMatch(/^\S+@\S+\.\S+$/);
-    //   expect(password).toMatch(/^ (?=.* [A - Z])(?=.* [a - z])(?=.*\d).+ $/);
-    //   expect(password.length).toBeGreaterThan(8);
       expect(response.statusCode).toBe(201);
     });
 
