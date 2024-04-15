@@ -2,6 +2,7 @@ import Express from "express";
 import dotenv from "dotenv";
 import authRoutes from "./src/routes/auth.js";
 import errorHandler from "./src/middlewares/errors/errorHandler.js";
+import connectDB from "./src/db/connection.js";
 
 // Load environment variables
 dotenv.config();
@@ -19,10 +20,11 @@ app.use(errorHandler);
 try {
   const port = process.env.PORT || 3000;
   app.listen(port, () => {
+    connectDB();
     console.log(`Server is running on port ${port}`);
   });
 } catch (error) {
   console.log(error);
 }
 
-export default app
+export default app;

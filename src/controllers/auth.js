@@ -15,13 +15,26 @@ export const register = async (req, res, next) => {
   }
 };
 
-export const login = async (req, res,next) => {
+export const login = async (req, res, next) => {
   try {
     const token = await userService.loginService(req.body);
-    return res.json({ 
-       body: token, 
-       status: 200,
-       message: "Login successful" 
+    return res.json({
+      body: token,
+      status: 200,
+      message: "Login successful",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await userService.getAllUsers();
+    return res.json({
+      body: users,
+      status: 200,
+      message: "All users fetched successfully",
     });
   } catch (error) {
     next(error);
