@@ -15,11 +15,15 @@ export const register = async (req, res, next) => {
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res,next) => {
   try {
     const token = await userService.loginService(req.body);
+    return res.json({ 
+       body: token, 
+       status: 200,
+       message: "Login successful" 
+    });
   } catch (error) {
     next(error);
   }
-  return res.json({ body: token, status: 200, message: "Login successful" });
 };

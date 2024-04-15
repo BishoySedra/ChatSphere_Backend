@@ -8,7 +8,8 @@ const errorHandler = (error, req, res, next) => {
       status: error.statusCode,
     });
   }
-  return res.status(500).json({ msg: error.details, status: 500, body: null });
+  console.log(error);
+  return res.status(500).json({ msg: "Internal server error!", status: 500, body: null });
 };
 
 export default errorHandler;

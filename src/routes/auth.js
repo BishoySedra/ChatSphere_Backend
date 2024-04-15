@@ -10,6 +10,8 @@ router.post(
   validate(userSchema.registerSchema),
   authController.register
 );
-router.post("/login", authController.login);
+router.post("/login",
+ validate(userSchema.loginSchema),
+ authController.login);
 
 export default router;
