@@ -3,12 +3,28 @@ import dotenv from "dotenv";
 import authRoutes from "./src/routes/auth.js";
 import errorHandler from "./src/middlewares/errors/errorHandler.js";
 import connectDB from "./src/db/connection.js";
+import cors from "cors"
 
 // Load environment variables
 dotenv.config();
 
 // Create Express app
 const app = new Express();
+
+const allowedOrigins = ['http://localhost:3001'];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
+app.use(cors(corsOptions));
+
 
 // Parse JSON bodies (as sent by API clients)
 app.use(Express.json());
