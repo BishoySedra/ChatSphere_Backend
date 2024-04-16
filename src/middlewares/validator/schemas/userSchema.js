@@ -50,8 +50,24 @@ export const emailSchema = Joi.object({
     "string.empty": "Email cannot be empty",
     "string.email": "Email must be a valid email",
     "any.required": "Email is required",
-  })
-})
+  }),
+});
+
+export const friendRequestSchema = Joi.object({
+  sender: Joi.string().email().required().messages({
+    "string.base": "Sender must be a string",
+    "string.empty": "Sender cannot be empty",
+    "string.email": "Sender must be a valid email",
+    "any.required": "Sender is required",
+  }),
+  receiver: Joi.string().email().required().messages({
+    "string.base": "Receiver must be a string",
+    "string.empty": "Receiver cannot be empty",
+    "string.email": "Receiver must be a valid email",
+    "any.required": "Receiver is required",
+  }),
+});
+
 export const changedUsernameSchema = Joi.object({
   username: Joi.string().min(3).max(30).required().messages({
     "string.base": "Username must be a string",
@@ -60,4 +76,4 @@ export const changedUsernameSchema = Joi.object({
     "string.max": "Username must be at most 30 characters",
     "any.required": "Username is required",
   }),
-})
+});
