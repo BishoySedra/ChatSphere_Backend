@@ -58,7 +58,3 @@ export const loginService = async (userData) => {
   return token;
 };
 
-export const getAllUsers = async () => {
-  const users = await User.find();
-  return users;
-};

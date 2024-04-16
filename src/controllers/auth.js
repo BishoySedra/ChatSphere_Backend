@@ -28,15 +28,3 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const getAllUsers = async (req, res, next) => {
-  try {
-    const users = await userService.getAllUsers();
-    return res.json({
-      body: users,
-      status: 200,
-      message: "All users fetched successfully",
-    });
-  } catch (error) {
-    next(error);
-  }
-};

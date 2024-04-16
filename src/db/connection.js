@@ -37,9 +37,7 @@ export default connectDB;
 
 async function clearAllCollections(connection){
   let collections = await connection.listCollections()
-  console.log(collections)
   for(let collection of collections){
-    console.log(collection.name);
     await connection.dropCollection(collection.name)
   }
   console.log("All collections cleared!")

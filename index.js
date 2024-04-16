@@ -1,9 +1,11 @@
 import Express from "express";
 import dotenv from "dotenv";
 import authRoutes from "./src/routes/auth.js";
+import profileRoutes from "./src/routes/profile.js";
 import errorHandler from "./src/middlewares/errors/errorHandler.js";
 import connectDB from "./src/db/connection.js";
 import cors from "cors";
+
 
 import { configureEnviromentVariable } from "./src/helpers/enviroment.js"
 
@@ -31,6 +33,7 @@ app.use(cors(corsOptions));
 app.use(Express.json());
 
 // define a route handler for the default home page
+app.use(`${process.env.BASE_URL}/profile`, profileRoutes);
 app.use(`${process.env.BASE_URL}/users`, authRoutes);
 app.use(errorHandler);
 
