@@ -3,7 +3,7 @@ Full-Stack Chat Application Project using ReactJS and NodeJS.
 
 API Documentation:
 
-https://documenter.getpostman.com/view/32763635/2sA35MzzRV#e48a33f9-b1ed-4b32-8e2e-304ab8320391
+[https://documenter.getpostman.com/view/32763635/2sA35MzzRV#e48a33f9-b1ed-4b32-8e2e-304ab8320391](API Documentation)
 
 ### STEPS TO RUN
 Currently there are three enviroments 
