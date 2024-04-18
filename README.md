@@ -1,24 +1,36 @@
+```markdown
 # ChatSphere
-Full-Stack Chat Application Project using ReactJS and NodeJS.
 
-API Documentation:
+ChatSphere is a Full-Stack Chat Application Project built using ReactJS and NodeJS.
 
-[https://documenter.getpostman.com/view/32763635/2sA35MzzRV#e48a33f9-b1ed-4b32-8e2e-304ab8320391](API Documentation)
+## API Documentation
 
-### STEPS TO RUN
-Currently there are three enviroments 
-```(dev,test,local)```
+For detailed information about the API endpoints and usage, please refer to the [API Documentation](https://documenter.getpostman.com/view/32763635/2sA35MzzRV#e48a33f9-b1ed-4b32-8e2e-304ab8320391).
 
-To be able to use a DB you must use one of the previous enviroments in your script like this:
+## Steps to Run
 
+Currently, there are three environments available: `dev`, `test`, and `local`.
 
-```npm run dev -- --enviroment=test``` for testing
+To use a database, you must specify one of the available environments in your script. Here's how to do it:
 
-```npm run dev -- --enviroment=dev``` for dev
+- For testing:
+  ```bash
+  npm run dev -- --environment=test
+  ```
 
-apply the same thing for other scripts like ``npm test`` or ``npm start``
+- For development:
+  ```bash
+  npm run dev -- --environment=dev
+  ```
 
+Make sure to apply the same approach for other scripts like `npm test` or `npm start`.
 
-TO BE ADDED: 
+### To Be Added
 
-```npm run dev -- --enviroment=local``` for local
+- For the local environment:
+  ```bash
+  npm run dev -- --environment=local
+  ```
+
+This command will be added for running the application in a local environment.
+```
