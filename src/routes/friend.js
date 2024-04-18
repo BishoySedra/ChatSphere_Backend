@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as FriendController from "../controllers/friend.js";
 import validate from "../middlewares/validator/validation.js";
+import { authorize } from "../middlewares/validator/authorize.js";
 import * as userSchemas from "../middlewares/validator/schemas/userSchema.js";
 
 const router = Router();
@@ -21,8 +22,9 @@ router.post(
 
 // accept friend request
 router.post(
-  "/:sender/response/:receiver",
+  "/:receiver/response/:sender",
   validate(userSchemas.friendRequestSchema, false),
+  validate(userSchemas.friendRequestResponseSchema),
   FriendController.respondToFriendRequest
 );
 

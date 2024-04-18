@@ -68,6 +68,15 @@ export const friendRequestSchema = Joi.object({
   }),
 });
 
+export const friendRequestResponseSchema = Joi.object({
+  status: Joi.string().valid("ACCEPTED", "REJECTED").required().messages({
+    "string.base": "Status must be a string",
+    "string.empty": "Status cannot be empty",
+    "any.only": "Status must be either accept or reject",
+    "any.required": "Status is required",
+  }),
+})
+
 export const changedUsernameSchema = Joi.object({
   username: Joi.string().min(3).max(30).required().messages({
     "string.base": "Username must be a string",

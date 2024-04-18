@@ -1,58 +1,54 @@
 import * as FriendService from "../services/friend.js";
+import { authorize } from "../middlewares/validator/authorize.js";
 
 // search friend by email
 export const searchFriendByEmail = (req, res, next) => {
   try {
-    const foundFriend = FriendService.searchFriendByEmailService(
+    const foundFriend = FriendService.searchFriendByEmail(
       req.params.email
     );
 
-    res
-      .status(200)
-      .json({ message: "Friend found", body: foundFriend, status: 200 });
+    res.send({ message: "Friend found", body: foundFriend, status: 200 });
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 };
 
 // send friend request
-export const sendFriendRequest = (req, res, next) => {
+export const sendFriendRequest = async (req, res, next) => {
   try {
-    const request = FriendService.sendFriendRequestService(
-      req.params.sender,
-      req.params.receiver
-    );
-    return res
-      .status(200)
-      .json({ message: "Friend request sent", status: 200, body: null });
+    let senderEmail = req.params.sender
+    let receiverEmail = req.params.receiver
+    await FriendService.validateEmails(senderEmail,receiverEmail)
+    await authorize(req,res,next,req.params.sender)
+    await FriendService.sendFriendRequest(req.params.sender,req.params.receiver);
+    
+    return res.send({ message: "Friend request sent succesfully!", status: 200, body: null });
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 };
 
 // respond to friend request
-export const respondToFriendRequest = (req, res, next) => {
+export const respondToFriendRequest = async (req, res, next) => {
   try {
-    const response = FriendService.respondToFriendRequestService(
-      req.params.sender,
-      req.params.receiver
-    );
-    return res
-      .status(200)
-      .json({ message: "Friend request responded", status: 200, body: null });
+    let senderEmail = req.params.sender
+    let receiverEmail = req.params.receiver
+    await FriendService.validateEmails(senderEmail,receiverEmail)
+    await authorize(req,res,next,req.params.receiver)
+    let message = await FriendService.respondToFriendRequest(senderEmail,receiverEmail,req.body.status);
+    return res.send({ message, status: 200, body: null });
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 };
 
 // get all friends of a user
 export const getAllFriends = (req, res, next) => {
   try {
-    const friends = FriendService.getAllFriendsService(req.params.email);
-    return res
-      .status(200)
-      .json({ message: "All friends of a user", status: 200, body: friends });
+    const friends = FriendService.getAllFriends(req.params.email);
+    return res.send({ message: "Friends of user retreived succesfully!", status: 200, body: friends });
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 };
