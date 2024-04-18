@@ -1,4 +1,3 @@
-```markdown
 # ChatSphere
 
 ChatSphere is a Full-Stack Chat Application Project built using ReactJS and NodeJS.
@@ -33,4 +32,3 @@ Make sure to apply the same approach for other scripts like `npm test` or `npm s
   ```
 
 This command will be added for running the application in a local environment.
-```
