@@ -5,12 +5,10 @@ const friendRequestSchema = new mongoose.Schema({
     senderEmail: {
         type: String,
         required: true,
-        unique: true,
     },
     receiverEmail: {
         type: String,
         required: true,
-        unique: true,
     }
 });
 

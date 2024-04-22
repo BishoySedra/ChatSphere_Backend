@@ -3,14 +3,16 @@ import { createCustomError } from "../middlewares/errors/customError.js";
 import FriendRequest from "../db/models/friend_request.js";
 
 import { authorize } from "../middlewares/validator/authorize.js";
+import { loggedInUsers, io as socket } from "../../index.js";
+
+
 
 export const searchFriendByEmail = async (email) => {
   return "search friend by email";
 };
 
 export const sendFriendRequest = async (senderEmail, receiverEmail) => {
-  // find the sender and receiver email if any of them is not found then throw custom error user not found
-  
+//   // find the sender and receiver email if any of them is not found then throw custom error user not found
   
   let friendRequestExists = await FriendRequest.findOne({senderEmail,receiverEmail}) 
     || await FriendRequest.findOne({senderEmail:receiverEmail,receiverEmail:senderEmail})
@@ -20,8 +22,20 @@ export const sendFriendRequest = async (senderEmail, receiverEmail) => {
     senderEmail,
     receiverEmail
   });
-
+  //[ {email : []} , {email : []} ]
   await newFriendRequest.save()
+  let receiverData = loggedInUsers.find(user => user.email === receiverEmail)
+  console.log(receiverData)
+  if(receiverData) {
+    receiverData.socketId.forEach((receiverSocket) => {
+      socket.to(receiverSocket).emit("receiveNotification", {senderEmail, receiverEmail})
+    })
+  }
+  // response to the previous event using the same socket
+
+  // io.use((socket, next) => {
+  //   socket.on("successfulLogin", (data) => console.log("successful login", data))
+  // });
   
 };
 

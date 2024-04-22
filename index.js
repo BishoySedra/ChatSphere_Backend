@@ -9,11 +9,15 @@ import profileRoutes from "./src/routes/profile.js";
 import friendRoutes from "./src/routes/friend.js";
 import connectDB from "./src/db/connection.js";
 
+import http from "http";
+import { Server } from "socket.io"
+
 // Load environment variables
 dotenv.config();
 
 // Create Express app
 const app = new Express();
+
 
 const allowedOrigins = ["http://localhost:3001"];
 
@@ -41,15 +45,54 @@ app.use(`${process.env.BASE_URL}/users`, friendRoutes);
 app.use(errorHandler);
 app.use(notFoundHandler);
 
+
+
+const server = http.createServer(app);
+export const io = new Server(server)
+
+export const loggedInUsers = []//{email: [array of socket ids]}
+
+const addLoggedInUser = (email, socketId) => {
+  const user = loggedInUsers.find(user => user.email === email)
+  if (user) {
+    console.log(user)
+    if (!user.socketId.includes(socketId)) {
+      user.socketId.push(socketId);
+    }
+  } else {
+    console.log("HERE : " + email + ", " + socketId)
+    loggedInUsers.push({ email, socketId: [socketId] })
+  }
+}
+
+const removeLoggedInUser = (email, socketId) => {
+  const user = loggedInUsers.find(user => user.email === email)
+  if (user) {
+    user.socketId = user.socketId.filter(id => id !== socketId)
+  }
+}
+
 try {
   const port = process.env.PORT || 3000;
-  app.listen(port, () => {
+  server.listen(port, () => {
     let env = configureEnviromentVariable();
     connectDB(env);
     console.log(`Server listening on port ${port}`);
   });
+  
 } catch (error) {
   console.log(error);
 }
+
+io.on("connection", (socket) => {
+  console.log("New client connected");
+  // Handle other socket events here if needed
+  console.log(socket.id)
+  addLoggedInUser("bishoy@mail.com",socket.id)
+  //socket.on("successfulLogin", (data) => console.log("successful login", data))
+  socket.on("disconnect", () => {
+    removeLoggedInUser("bishoy@mail.com",socket.id)
+  });
+});
 
 export default app;
