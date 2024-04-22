@@ -2,8 +2,7 @@ import User from "../db/models/user.js";
 import { createCustomError } from "../middlewares/errors/customError.js";
 import FriendRequest from "../db/models/friend_request.js";
 
-import { authorize } from "../middlewares/validator/authorize.js";
-import { loggedInUsers, io as socket } from "../../index.js";
+import * as sockets from "../helpers/sockets.js";
 
 
 
@@ -21,16 +20,9 @@ export const sendFriendRequest = async (senderEmail, receiverEmail) => {
     senderEmail,
     receiverEmail
   });
-  //[ {email : []} , {email : []} ]
   await newFriendRequest.save()
-  let receiverData = loggedInUsers.find(user => user.email === receiverEmail)
-  console.log(receiverData)
-  if(receiverData) {
-    receiverData.socketId.forEach((receiverSocket) => {
-      socket.to(receiverSocket).emit("receiveNotification", {senderEmail, receiverEmail})
-    })
-  }
-  
+
+  sockets.sendToOnlineReceivers({senderEmail,receiverEmail},receiverEmail,"receiveNotification")
   
 };
 
@@ -61,14 +53,9 @@ export const respondToFriendRequest = async (senderEmail, receiverEmail,status) 
     await receiverUser.save()
     responseMessage = "Friend request accepted!"
 
-    let senderData = loggedInUsers.find(user => user.email === senderEmail)
-    if(senderData) {
-      senderData.socketId.forEach((senderSocket) => {
-        socket.to(senderSocket).emit("acceptFriendRequest", {senderEmail, receiverEmail})
-      })
-    } 
-    
 
+    sockets.sendToOnlineReceivers({senderEmail, receiverEmail},senderEmail,"acceptFriendRequest")
+    
   }
   
 

@@ -11,6 +11,7 @@ import connectDB from "./src/db/connection.js";
 
 import http from "http";
 import { Server } from "socket.io"
+import { socketConnection } from "./src/helpers/sockets.js";
 
 // Load environment variables
 dotenv.config();
@@ -46,32 +47,7 @@ app.use(errorHandler);
 app.use(notFoundHandler);
 
 
-
 const server = http.createServer(app);
-export const io = new Server(server)
-
-export const loggedInUsers = []//{email: [array of socket ids]}
-
-const addLoggedInUser = (email, socketId) => {
-  const user = loggedInUsers.find(user => user.email === email)
-  if (user) {
-    console.log(user)
-    if (!user.socketId.includes(socketId)) {
-      user.socketId.push(socketId);
-    }
-  } else {
-    console.log("HERE : " + email + ", " + socketId)
-    loggedInUsers.push({ email, socketId: [socketId] })
-  }
-}
-
-const removeLoggedInUser = (email, socketId) => {
-  const user = loggedInUsers.find(user => user.email === email)
-  if (user) {
-    user.socketId = user.socketId.filter(id => id !== socketId)
-  }
-}
-
 try {
   const port = process.env.PORT || 3000;
   server.listen(port, () => {
@@ -84,15 +60,6 @@ try {
   console.log(error);
 }
 
-io.on("connection", (socket) => {
-  console.log("New client connected");
-  socket.on("successfulLogin", ({ email }) => {
-    console.log("successful login", email, socket.id)
-    addLoggedInUser(email,socket.id)
-  })
-  socket.on("succesfulLogout", ({ email }) => {
-    removeLoggedInUser(email,socket.id)
-  });
-});
+socketConnection(server)
 
-export default app;
+export default {app };
