@@ -86,12 +86,12 @@ try {
 
 io.on("connection", (socket) => {
   console.log("New client connected");
-  // Handle other socket events here if needed
-  console.log(socket.id)
-  addLoggedInUser("bishoy@mail.com",socket.id)
-  //socket.on("successfulLogin", (data) => console.log("successful login", data))
-  socket.on("disconnect", () => {
-    removeLoggedInUser("bishoy@mail.com",socket.id)
+  socket.on("successfulLogin", ({ email }) => {
+    console.log("successful login", email, socket.id)
+    addLoggedInUser(email,socket.id)
+  })
+  socket.on("succesfulLogout", ({ email }) => {
+    removeLoggedInUser(email,socket.id)
   });
 });
 

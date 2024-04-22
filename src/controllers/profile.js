@@ -1,4 +1,5 @@
 import * as profileService from "../services/profile.js" 
+import * as FriendService from "../services/friend.js" 
 export const getAllUsers = async (req, res, next) => {
     try {
       const users = await profileService.getAllUsers();
@@ -38,3 +39,4 @@ export const changeUsernameByEmail = async (req, res, next) => {
     next(error);
   }
 }
+

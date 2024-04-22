@@ -12,7 +12,6 @@ export const searchFriendByEmail = async (email) => {
 };
 
 export const sendFriendRequest = async (senderEmail, receiverEmail) => {
-//   // find the sender and receiver email if any of them is not found then throw custom error user not found
   
   let friendRequestExists = await FriendRequest.findOne({senderEmail,receiverEmail}) 
     || await FriendRequest.findOne({senderEmail:receiverEmail,receiverEmail:senderEmail})
@@ -31,11 +30,7 @@ export const sendFriendRequest = async (senderEmail, receiverEmail) => {
       socket.to(receiverSocket).emit("receiveNotification", {senderEmail, receiverEmail})
     })
   }
-  // response to the previous event using the same socket
-
-  // io.use((socket, next) => {
-  //   socket.on("successfulLogin", (data) => console.log("successful login", data))
-  // });
+  
   
 };
 
@@ -65,10 +60,21 @@ export const respondToFriendRequest = async (senderEmail, receiverEmail,status) 
     await senderUser.save()
     await receiverUser.save()
     responseMessage = "Friend request accepted!"
+
+    let senderData = loggedInUsers.find(user => user.email === senderEmail)
+    if(senderData) {
+      senderData.socketId.forEach((senderSocket) => {
+        socket.to(senderSocket).emit("acceptFriendRequest", {senderEmail, receiverEmail})
+      })
+    } 
+    
+
   }
   
 
   await FriendRequest.deleteOne({senderEmail,receiverEmail})
+
+  
   return responseMessage
 };
 
@@ -84,3 +90,28 @@ export const getAllFriends = async (email) => {
                ,{ email: 1, username: 1 , _id: 1})
     return friendsDetails
 };
+
+export const unfriend = async (email, friendEmail) => {
+  const user = await User.findOne({ email: email });
+  const friendUser = await User.findOne({email: friendEmail})
+
+  if (!user || !friendUser) {
+    throw createCustomError("User not found!", 404,null);
+  }
+
+  let userFriends = user.friends
+  let friendFriends = friendUser.friends
+
+  let friendIndex = userFriends.indexOf(friendUser._id)
+  let userIndex = friendFriends.indexOf(user._id)
+
+  if(friendIndex === -1 && userIndex === -1){
+    throw createCustomError("Friend not found!", 404,null)
+  }
+
+  userFriends.splice(friendIndex,1)
+  friendFriends.splice(userIndex,1)
+
+  await user.save()
+  await friendUser.save()
+}

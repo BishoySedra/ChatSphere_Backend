@@ -17,7 +17,7 @@ export const authorize = async (req, res, next,expectedEmail) => {
         res.status(400).json({message: "Error while verifying token!",body:null,status:400})
     }
     if(tokenData['0'].email !== expectedEmail){
-        console.log("HERE WRONG!")
+        // console.log("HERE WRONG!")
         throw new createCustomError("Unauthorized Access!", 403, null);
     }
 }

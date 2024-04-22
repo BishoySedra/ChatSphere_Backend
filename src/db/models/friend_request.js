@@ -7,6 +7,7 @@ const friendRequestSchema = new mongoose.Schema({
         required: true,
     },
     receiverEmail: {
+        
         type: String,
         required: true,
     }

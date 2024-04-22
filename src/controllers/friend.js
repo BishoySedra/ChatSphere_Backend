@@ -52,3 +52,19 @@ export const getAllFriends = (req, res, next) => {
     next(error)
   }
 };
+
+export const unfriend = async (req,res,next) => {
+  try{
+    let email = req.params.email
+    let friendEmail = req.params.friendEmail
+    await authorize(req,res,next,req.params.email)
+    await FriendService.unfriend(email,friendEmail)   
+    return res.json({
+      body: null,
+      status: 200,
+      message: "Unfriended successfully",
+    });
+  }catch(error){
+    next(error)
+  }
+}

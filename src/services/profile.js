@@ -26,3 +26,4 @@ export const changeUsernameByEmail = async (email, newUsername) => {
     const { password, ...userWithoutPassword } = user.toObject();
     return userWithoutPassword;
 };
+

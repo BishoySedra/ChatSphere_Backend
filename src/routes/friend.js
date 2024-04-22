@@ -34,4 +34,9 @@ router.get(
   FriendController.getAllFriends
 );
 
+router.patch("/:email/unfriend/:friendEmail",
+    validate(userSchemas.unfriendSchema,false),
+    FriendController.unfriend
+);
+
 export default router;
