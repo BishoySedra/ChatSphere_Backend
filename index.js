@@ -7,10 +7,11 @@ import notFoundHandler from "./src/middlewares/errors/notFoundHandler.js";
 import authRoutes from "./src/routes/auth.js";
 import profileRoutes from "./src/routes/profile.js";
 import friendRoutes from "./src/routes/friend.js";
+import chatRoutes from "./src/routes/chat.js";
+import messageRoutes from './src/routes/message.js';
 import connectDB from "./src/db/connection.js";
 
 import http from "http";
-import { Server } from "socket.io"
 import { socketConnection } from "./src/helpers/sockets.js";
 
 // Load environment variables
@@ -41,6 +42,8 @@ app.use(Express.json());
 app.use(`${process.env.BASE_URL}/profile`, profileRoutes);
 app.use(`${process.env.BASE_URL}/auth`, authRoutes);
 app.use(`${process.env.BASE_URL}/users`, friendRoutes);
+app.use(`${process.env.BASE_URL}/chats`, chatRoutes);
+app.use(`${process.env.BASE_URL}/messages`, messageRoutes);
 
 // Error handling
 app.use(errorHandler);
