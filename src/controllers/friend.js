@@ -1,18 +1,18 @@
 import * as FriendService from "../services/friend.js";
 import { authorize } from "../middlewares/validator/authorize.js";
 
-// search friend by email
-export const searchFriendByEmail = (req, res, next) => {
-  try {
-    const foundFriend = FriendService.searchFriendByEmail(
-      req.params.email
-    );
+// // search friend by email
+// export const searchFriendByEmail = (req, res, next) => {
+//   try {
+//     const foundFriend = FriendService.searchFriendByEmail(
+//       req.params.email
+//     );
 
-    res.send({ message: "Friend found", body: foundFriend, status: 200 });
-  } catch (error) {
-    next(error)
-  }
-};
+//     res.send({ message: "Friend found", body: foundFriend, status: 200 });
+//   } catch (error) {
+//     next(error)
+//   }
+// };
 
 // send friend request
 export const sendFriendRequest = async (req, res, next) => {
