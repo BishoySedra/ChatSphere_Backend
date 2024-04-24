@@ -39,4 +39,9 @@ router.patch("/:email/unfriend/:friendEmail",
     FriendController.unfriend
 );
 
+router.patch('/:sender/cancel-friend-request/:receiver',
+  validate(userSchemas.friendRequestSchema, false),
+  FriendController.cancelFriendRequest
+)
+
 export default router;

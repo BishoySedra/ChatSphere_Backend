@@ -102,3 +102,10 @@ export const unfriend = async (email, friendEmail) => {
   await user.save()
   await friendUser.save()
 }
+
+export const cancelFriendRequest = async (senderEmail, receiverEmail) => {
+  let friendRequest = await FriendRequest.findOne({senderEmail,receiverEmail})
+  if(!friendRequest)
+    throw createCustomError("Friend request not found!", 404,null)
+  await friendRequest.deleteOne()
+}
