@@ -5,8 +5,8 @@ import env from "dotenv";
 env.config();
 
 describe("POST /users/login", () => {
-  const registerURL = `${process.env.BASE_URL}/users/register`;
-  const url = `${process.env.BASE_URL}/users/login`;
+  const registerURL = `${process.env.BASE_URL}/auth/register`;
+  const url = `${process.env.BASE_URL}/auth/login`;
   describe("given email and password", () => {
     // all is well
     it("should return 200 OK", async () => {
