@@ -62,4 +62,4 @@ try {
 
 socketConnection(server)
 
-export default {app };
+export default app;
