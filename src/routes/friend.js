@@ -7,11 +7,11 @@ import * as userSchemas from "../middlewares/validator/schemas/userSchema.js";
 const router = Router();
 
 // search friend by email
-router.get(
-  "/search/:email",
-  validate(userSchemas.emailSchema, false),
-  FriendController.searchFriendByEmail
-);
+// router.get(
+//   "/search/:email",
+//   validate(userSchemas.emailSchema, false),
+//   FriendController.searchFriendByEmail
+// );
 
 // send friend request
 router.post(
