@@ -1,6 +1,7 @@
 import User from "../db/models/user.js";
 import { createCustomError } from "../middlewares/errors/customError.js";
 import FriendRequest from "../db/models/friend_request.js";
+import Chat from "../db/models/chat.js";
 
 import * as sockets from "../helpers/sockets.js";
 
@@ -56,6 +57,13 @@ export const respondToFriendRequest = async (senderEmail, receiverEmail,status) 
 
     sockets.sendToOnlineReceivers({senderEmail, receiverEmail},senderEmail,"acceptFriendRequest")
     
+    //make a new chat between the two users
+    let NewChat = new Chat({
+      users : [senderUser.email,receiverUser.email],
+      chat_type : "PRIVATE"
+    })
+    await NewChat.save()
+
   }
   
 

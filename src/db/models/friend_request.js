@@ -4,12 +4,10 @@ import mongoose from "mongoose";
 const friendRequestSchema = new mongoose.Schema({
     senderEmail: {
         type: String,
-        required: true,
     },
     receiverEmail: {
         
         type: String,
-        required: true,
     }
 });
 

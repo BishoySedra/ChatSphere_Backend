@@ -102,3 +102,44 @@ export const unfriendSchema = Joi.object({
     "any.required": "Friend email is required",
   }),
 });
+
+export const sendMessageURLSchema = Joi.object({
+  senderEmail: Joi.string().email().required().messages({
+    "string.base": "Sender email must be a string",
+    "string.empty": "Sender email cannot be empty",
+    "string.email": "Sender email must be a valid email",
+    "any.required": "Sender email is required",
+  }),
+  chatID: Joi.string().required().messages({
+    "string.base": "Chat ID must be a string",
+    "string.empty": "Chat ID cannot be empty",
+    "any.required": "Chat ID is required",
+  })
+});
+
+export const deleteMessageURLSchema = Joi.object({
+  senderEmail: Joi.string().email().required().messages({
+    "string.base": "Sender email must be a string",
+    "string.empty": "Sender email cannot be empty",
+    "string.email": "Sender email must be a valid email",
+    "any.required": "Sender email is required",
+  }),
+  chatID: Joi.string().required().messages({
+    "string.base": "Chat ID must be a string",
+    "string.empty": "Chat ID cannot be empty",
+    "any.required": "Chat ID is required",
+  }),
+  messageID: Joi.string().required().messages({
+    "string.base": "Message ID must be a string",
+    "string.empty": "Message ID cannot be empty",
+    "any.required": "Message ID is required",
+  })
+});
+
+export const messageBodySchema = Joi.object({
+  message: Joi.string().required().messages({
+    "string.base": "Message must be a string",
+    "string.empty": "Message cannot be empty",
+    "any.required": "Message is required",
+  }),
+});

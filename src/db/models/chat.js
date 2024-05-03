@@ -1,6 +1,8 @@
 
 import mongoose from "mongoose";
+import { messageSchema } from "../models/message.js"
 const { Schema } = mongoose;
+
 
 const chatSchema = new Schema({
     users: {
@@ -8,7 +10,8 @@ const chatSchema = new Schema({
         required: true,
     },
     messages: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [messageSchema],
+        ref: "Message",
     },
     chat_type: {
         type: String,
