@@ -44,8 +44,10 @@ export const respondToFriendRequest = async (req, res, next) => {
 };
 
 // get all friends of a user
-export const getAllFriends = (req, res, next) => {
+export const getAllFriends = async (req, res, next) => {
   try {
+    let email = req.params.email
+    await authorize(req,res,next,email)
     const friends = FriendService.getAllFriends(req.params.email);
     return res.send({ message: "Friends of user retreived succesfully!", status: 200, body: friends });
   } catch (error) {

@@ -6,7 +6,7 @@ import env from "dotenv"
 
 describe("POST /users/register", () => {
   describe("given a username, email and password", () => {
-    const url = `${process.env.BASE_URL}/users/register`;
+    const url = `${process.env.BASE_URL}/auth/register`;
     // all is well
     it("should respond with status code 201", async () => {
       const response = await request(app).post(url).send({
