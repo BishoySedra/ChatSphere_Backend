@@ -52,9 +52,10 @@ export const deleteMessage = async (senderEmail, chatID, messageID) => {
     let toBeDeletedMessage = chat.messages.find(message => message._id == messageID);
     if(!toBeDeletedMessage)
         throw createCustomError("Message not found!", 404,null)
-    if(toBeDeletedMessage.sender_email != senderEmail)
+    if(toBeDeletedMessage.sender_email != senderEmail && chat.chat_type == "PRIVATE")
         throw createCustomError("You are not allowed to delete this message!", 403,null)
-
+    if(chat.chat_type == "GROUP" && chat.admin_email != senderEmail)
+        throw createCustomError("You are not allowed to delete this message!", 403,null)
     //delete the message
     chat.messages = chat.messages.filter(message => message._id != messageID);
     await chat.save();

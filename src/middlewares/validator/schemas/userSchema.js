@@ -143,3 +143,40 @@ export const messageBodySchema = Joi.object({
     "any.required": "Message is required",
   }),
 });
+
+export const createGroupChatSchema = Joi.object({
+  adminEmail: Joi.string().email().required().messages({
+    "string.base": "Admin email must be a string",
+    "string.empty": "Admin email cannot be empty",
+    "string.email": "Admin email must be a valid email",
+    "any.required": "Admin email is required",
+  }),
+  groupName: Joi.string().required().messages({
+    "string.base": "Group name must be a string",
+    "string.empty": "Group name cannot be empty",
+    "any.required": "Group name is required",
+  }),
+  groupDescription: Joi.string().messages({
+    "string.base": "Group description must be a string"
+  }),
+});
+
+export const addUserToGroupChatSchema = Joi.object({
+  adminEmail: Joi.string().email().required().messages({
+    "string.base": "Admin email must be a string",
+    "string.empty": "Admin email cannot be empty",
+    "string.email": "Admin email must be a valid email",
+    "any.required": "Admin email is required",
+  }),
+  userEmail: Joi.string().email().required().messages({
+    "string.base": "User email must be a string",
+    "string.empty": "User email cannot be empty",
+    "string.email": "User email must be a valid email",
+    "any.required": "User email is required",
+  }),
+  chatID: Joi.string().required().messages({
+    "string.base": "Chat ID must be a string",
+    "string.empty": "Chat ID cannot be empty",
+    "any.required": "Chat ID is required",
+  }),
+});
