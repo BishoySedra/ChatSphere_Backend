@@ -22,7 +22,7 @@ export const changeUsernameByEmail = async (email, newUsername) => {
         throw createCustomError("Email not found!",404,null);
     }
     user.username = newUsername;
-    await User.updateOne(user)
+    await user.save()
     const { password, ...userWithoutPassword } = user.toObject();
     return userWithoutPassword;
 };

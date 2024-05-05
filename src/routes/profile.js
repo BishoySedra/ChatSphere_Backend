@@ -6,8 +6,6 @@ import { authorize } from "../middlewares/validator/authorize.js";
 
 const router = Router();
 
-router.get("/all",userController.getAllUsers);
-
 router.get("/:email",
     validate(userSchema.emailSchema,false),
     userController.getUser);
