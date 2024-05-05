@@ -22,8 +22,8 @@ export const sendFriendRequest = async (senderEmail, receiverEmail) => {
     receiverEmail
   });
   await newFriendRequest.save()
-
-  sockets.sendToOnlineReceivers({senderEmail,receiverEmail},receiverEmail,"receiveNotification")
+  let senderUser = await User.findOne({ email: senderEmail });
+  sockets.sendToOnlineReceivers({email : senderEmail, username: senderUser.username},receiverEmail,"receiveNotification")
   
 };
 
@@ -54,8 +54,8 @@ export const respondToFriendRequest = async (senderEmail, receiverEmail,status) 
     await receiverUser.save()
     responseMessage = "Friend request accepted!"
 
-
-    sockets.sendToOnlineReceivers({senderEmail, receiverEmail},senderEmail,"acceptFriendRequest")
+    
+    sockets.sendToOnlineReceivers({email: senderEmail, username: senderUser.username},senderEmail,"acceptFriendRequest")
     
     //make a new chat between the two users
     let NewChat = new Chat({
@@ -80,10 +80,13 @@ export const getAllFriends = async (email) => {
         throw createCustomError("User not found!", 404,null)
     }
     let userFriendsIds = user.friends
-    let friendsDetails = await User.find(
-               { _id: { $in: userFriendsIds } }
-               ,{ email: 1, username: 1 , _id: 1})
-    return friendsDetails
+    console.log(userFriendsIds)
+    let friendsDetails = []
+    for(let friendId of userFriendsIds) {
+        let friend = await User.findById(friendId)
+        friendsDetails.push(friend)
+    }
+    return friendsDetails.map(user => ({email: user.email, username: user.username}));
 };
 
 export const unfriend = async (email, friendEmail) => {
@@ -116,4 +119,19 @@ export const cancelFriendRequest = async (senderEmail, receiverEmail) => {
   if(!friendRequest)
     throw createCustomError("Friend request not found!", 404,null)
   await friendRequest.deleteOne()
+}
+
+export const getAllFriendRequests = async (email) => {
+  let user = await User.findOne({ email })
+  if(!user) {
+    throw createCustomError("User not found!", 404,null)
+  }
+  let friendRequests = await FriendRequest.find({receiverEmail: email})
+  let friendRequestsDetails = []
+  for(let request of friendRequests) {
+    //get the name and email of the senders
+    let sender = await User.findOne({email: request.senderEmail})
+    friendRequestsDetails.push(sender)
+  }
+  return friendRequestsDetails.map(user => ({email: user.email, username: user.username}))
 }

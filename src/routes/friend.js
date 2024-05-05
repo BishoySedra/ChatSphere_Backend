@@ -34,6 +34,12 @@ router.get(
   FriendController.getAllFriends
 );
 
+router.get(
+  "/:email/friend-requests",
+  validate(userSchemas.emailSchema, false),
+  FriendController.getAllFriendRequests
+);
+
 router.patch("/:email/unfriend/:friendEmail",
     validate(userSchemas.unfriendSchema,false),
     FriendController.unfriend

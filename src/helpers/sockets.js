@@ -35,21 +35,31 @@ export const sendToOnlineReceivers = (data,currentlyOnlineEmail,eventName) => {
 
 
 export const socketConnection = (server) => {
-    io = new Server(server)
-    io.on("connection", (socket) => {
-        console.log("New client connected");
-        socket.on("successfulLogin", ({ email }) => {
-          addLoggedInUser(email,socket.id)
-        })
-        socket.on("succesfulLogout", ({ email }) => {
-          removeLoggedInUser(email,socket.id)
-        });
-        socket.on("disconnect", () => {
-          console.log("Client disconnected");
-            loggedInUsers = loggedInUsers.map(user => {
-                user.socketId = user.socketId.filter(id => id !== socket.id)
-                return user
-            }).filter(user => user.socketId.length > 0)
-        });
+  io = new Server(server, {
+    cors: {
+      origin: ["http://localhost:3001"],
+    },
+  });
+  io.on("connection", (socket) => {
+    console.log("New client connected");
+    console.log(socket.id)
+    socket.on("successfulLogin", ({ email }) => {
+      addLoggedInUser(email, socket.id);
+      console.log(email,socket.id);
+      console.log(loggedInUsers);
     });
-}
+    socket.on("succesfulLogout", ({ email }) => {
+      removeLoggedInUser(email, socket.id);
+    });
+    socket.on("disconnect", () => {
+      console.log("Client disconnected");
+      console.log(socket.id)
+      loggedInUsers = loggedInUsers
+        .map((user) => {
+          user.socketId = user.socketId.filter((id) => id !== socket.id);
+          return user;
+        })
+        .filter((user) => user.socketId.length > 0);
+    });
+  });
+};

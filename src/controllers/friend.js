@@ -48,12 +48,23 @@ export const getAllFriends = async (req, res, next) => {
   try {
     let email = req.params.email
     await authorize(req,res,next,email)
-    const friends = FriendService.getAllFriends(req.params.email);
+    const friends = await FriendService.getAllFriends(req.params.email);
     return res.send({ message: "Friends of user retreived succesfully!", status: 200, body: friends });
   } catch (error) {
     next(error)
   }
 };
+
+export const getAllFriendRequests = async (req,res,next) => {
+  try{
+    let email = req.params.email
+    await authorize(req,res,next,email)
+    const friendRequests = await FriendService.getAllFriendRequests(email)
+    return res.send({ message: "Friend requests retreived succesfully!", status: 200, body: friendRequests });
+  }catch(error){
+    next(error)
+  }
+}
 
 export const unfriend = async (req,res,next) => {
   try{
