@@ -58,12 +58,16 @@ export const respondToFriendRequest = async (senderEmail, receiverEmail,status) 
     sockets.sendToOnlineReceivers({email: senderEmail, username: senderUser.username},senderEmail,"acceptFriendRequest")
     
     //make a new chat between the two users
-    let NewChat = new Chat({
-      users : [senderUser.email,receiverUser.email],
-      chat_type : "PRIVATE"
-    })
-    await NewChat.save()
+    //check if a chat already exists between the two users
+    let chatExists = await Chat.findOne({users : [senderUser.email,receiverUser.email],chat_type : "PRIVATE"})
 
+    if(!chatExists){
+      let NewChat = new Chat({
+        users : [senderUser.email,receiverUser.email],
+        chat_type : "PRIVATE"
+      })
+      await NewChat.save()
+    }
   }
   
 
