@@ -2,7 +2,7 @@ import { createCustomError } from "../middlewares/errors/customError.js";
 import Chat from "../db/models/chat.js";
 import GroupChat from "../db/models/group.chat.js";
 import User from "../db/models/user.js";
-
+import { authorizeOnGroup } from "../middlewares/validator/authorize.js";
 export const getUserPrivateChats = async (email) => {
     const user = await User.findOne({ email: email });
     if (!user) 
@@ -58,4 +58,14 @@ export const getUserGroupChats = async (email) => {
         throw createCustomError("User not found!", 404, null);
     const chats = await Chat.find({users: { $in : [email] } ,chat_type: "GROUP"});
     return chats;
+}
+
+export const getGroupChatDetails = async (id,token) => {
+    const groupChat = await GroupChat.findOne({ chat_id: id });
+    if (!groupChat) 
+        throw createCustomError("Group chat not found!", 404, null);
+    let chat = await Chat.findOne({ _id: id });
+    let groupUsers = chat.users
+    await authorizeOnGroup(token,groupUsers)
+    return groupChat;
 }

@@ -180,3 +180,11 @@ export const addUserToGroupChatSchema = Joi.object({
     "any.required": "Chat ID is required",
   }),
 });
+
+export const chatIDSchema = Joi.object({
+  chatID: Joi.string().required().messages({
+    "string.base": "Chat ID must be a string",
+    "string.empty": "Chat ID cannot be empty",
+    "any.required": "Chat ID is required",
+  }),
+});

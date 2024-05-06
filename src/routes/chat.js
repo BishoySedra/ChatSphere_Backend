@@ -10,6 +10,10 @@ router.get("/private/:email",
 router.get("/groups/:email",
     validate(schemas.emailSchema, false),
     chatController.getUserGroupChats);
+router.get("/groups/details/:chatID",
+    validate(schemas.chatIDSchema, false),
+    chatController.getGroupChatDetails
+)
 
 router.post("/groups/create",
     validate(schemas.createGroupChatSchema),
