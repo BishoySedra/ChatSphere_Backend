@@ -29,6 +29,21 @@ export const getUser = async (req,res,next) => {
       }
 }
 
+export const getUsernameByEmail = async (req, res, next) => {
+  try {
+    let email = req.params.email
+    const user = await profileService.getUsernameByEmail(email);
+    return res.json({
+      body: user,
+      status: 200,
+      message: "Username fetched successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+
+}
+
 export const changeUsernameByEmail = async (req, res, next) => {
   try {
     let email = req.params.email

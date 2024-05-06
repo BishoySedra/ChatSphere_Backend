@@ -16,6 +16,14 @@ export const getUser = async (email) => {
     return userWithoutPassword;
 }
 
+export const getUsernameByEmail = async (email) => {
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw createCustomError("Email not found!",404,null);
+    }
+    return user.username;
+}
+
 export const changeUsernameByEmail = async (email, newUsername) => {
     const user = await User.findOne({ email });
     if (!user) {

@@ -9,7 +9,10 @@ const router = Router();
 router.get("/:email",
     validate(userSchema.emailSchema,false),
     userController.getUser);
-    
+router.get("/username/:email",
+    validate(userSchema.emailSchema,false),
+    userController.getUsernameByEmail);
+
 router.patch("/change-username/:email",
     validate(userSchema.emailSchema,false),
     validate(userSchema.changedUsernameSchema),
