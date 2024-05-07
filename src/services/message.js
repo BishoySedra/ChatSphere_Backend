@@ -2,6 +2,8 @@ import User from "../db/models/user.js";
 import Chat from "../db/models/chat.js";
 import { Message } from "../db/models/message.js";
 import {createCustomError} from "../middlewares/errors/customError.js";
+import * as sockets from "../helpers/sockets.js"
+
 
 export const sendMessage = async (senderEmail, chatID, message) => {
     let senderUser = await User.findOne({ email: senderEmail });
@@ -23,11 +25,18 @@ export const sendMessage = async (senderEmail, chatID, message) => {
         throw createCustomError("You are not in this chat!", 403,null)
     //create new message and add it to the chat
     let newMessage = new Message({text : message, sender_email : senderEmail})
-    /*
-        send to all users that are online in the chat
-    */
+    
+    let messageID = newMessage._id.toString()
     chat.messages.push(newMessage);
     await chat.save();
+
+
+    let toBeSentMessage = chat.messages.find(message => message._id == messageID);
+    
+    let receiversEmails = chat.users.filter(user => user != senderEmail)
+    receiversEmails.forEach((receiverEmail) => {
+        sockets.sendToOnlineReceivers(toBeSentMessage,receiverEmail,"receivedMessage")
+    })
 }
 
 export const deleteMessage = async (senderEmail, chatID, messageID) => {
