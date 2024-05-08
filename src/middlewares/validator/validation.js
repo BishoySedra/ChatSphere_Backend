@@ -1,12 +1,12 @@
-function validate(schema,isBody=true) {
+function validate(schema, isBody = true) {
   return async function (req, res, next) {
     try {
-      let validatedResult
-      if(isBody)
+      let validatedResult;
+      if (isBody)
         validatedResult = await schema.validateAsync(req.body, {
           abortEarly: false,
         });
-      else{
+      else {
         validatedResult = await schema.validateAsync(req.params, {
           abortEarly: false,
         });
