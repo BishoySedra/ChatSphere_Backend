@@ -37,6 +37,8 @@ export const sendMessage = async (senderEmail, chatID, message) => {
     receiversEmails.forEach((receiverEmail) => {
         sockets.sendToOnlineReceivers(toBeSentMessage,receiverEmail,"receivedMessage")
     })
+
+    return toBeSentMessage
 }
 
 export const deleteMessage = async (senderEmail, chatID, messageID) => {

@@ -6,8 +6,8 @@ export const sendMessage = async (req, res, next) => {
         const { senderEmail, chatID } = req.params;
         const { message } = req.body;
         await authorize(req,res,next,senderEmail);
-        await MessageService.sendMessage(senderEmail, chatID, message);
-        return res.status(200).json({body: null , message: "Message sent successfully", status: 200});
+        let sentMessage = await MessageService.sendMessage(senderEmail, chatID, message);
+        return res.status(200).json({body: sentMessage , message: "Message sent successfully", status: 200});
     } catch (error) {
         next(error);
     }
