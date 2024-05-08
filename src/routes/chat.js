@@ -24,4 +24,10 @@ router.post("/groups/add-friend",
     chatController.addUserToGroupChat
 )
 
+router.delete("/groups/:chatID",
+    validate(schemas.chatIDSchema, false),
+    validate(schemas.emailSchema),
+    chatController.deleteGroupChat
+)
+
 export default router;

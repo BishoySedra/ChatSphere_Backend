@@ -48,8 +48,8 @@ export const createGroupChat = async (req, res,next) => {
     if(!user)
       throw createCustomError("User not found!", 404, null);
     await authorize(req,res,next,adminEmail)
-    await chatService.createGroupChat(adminEmail,groupName,groupDescription)
-    return res.send({ body : null, message: "Group chat created succesfully!", status: 200 });
+    let chatID = await chatService.createGroupChat(adminEmail,groupName,groupDescription)
+    return res.send({ body : chatID, message: "Group chat created succesfully!", status: 200 });
   }catch(err){
     next(err)
   }
@@ -61,6 +61,18 @@ export const addUserToGroupChat = async (req, res,next) => {
     await authorize(req,res,next,adminEmail)
     await chatService.addUserToGroupChat(adminEmail,userEmail, chatID)
     return res.send({ body : null, message: "User added to group chat succesfully!", status: 200 });
+  }catch(err){
+    next(err)
+  }
+}
+
+export const deleteGroupChat = async (req, res,next) => {
+  try{
+    const { chatID } = req.params;
+    const { email } = req.body;
+    await authorize(req,res,next,email)
+    await chatService.deleteGroupChat(email,chatID)
+    return res.send({ body : null, message: "Group chat deleted succesfully!", status: 200 });
   }catch(err){
     next(err)
   }

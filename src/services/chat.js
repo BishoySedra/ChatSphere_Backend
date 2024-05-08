@@ -28,6 +28,7 @@ export const createGroupChat = async (adminEmail,groupName,groupDescription="") 
         admin_email : adminEmail
     })
     await NewGroupChat.save();
+    return NewChat._id
 }
 
 export const addUserToGroupChat = async (adminEmail,userEmail, chatID) => {
@@ -48,6 +49,9 @@ export const addUserToGroupChat = async (adminEmail,userEmail, chatID) => {
     const groupChat = await GroupChat.findOne({ chat_id : chatID });
     if(admin.email != groupChat.admin_email)
         throw createCustomError("You are not the admin of this group chat!", 403, null);
+    //check if the user is already in the chat
+    if(chat.users.includes(userEmail))
+        throw createCustomError("User is already in the chat!", 400, null);
     chat.users.push(userEmail);
     await chat.save();
 }
@@ -68,4 +72,20 @@ export const getGroupChatDetails = async (id,token) => {
     let groupUsers = chat.users
     await authorizeOnGroup(token,groupUsers)
     return groupChat;
+}
+
+export const deleteGroupChat = async (adminEmail,chatID) => {
+    const admin = await User.findOne({ email: adminEmail });
+    if(!admin)
+        throw createCustomError("Admin not found!", 404, null);
+    const chat = await Chat.findOne({ _id: chatID });
+    if(!chat)
+        throw createCustomError("Chat not found!", 404, null);
+    if(chat.chat_type != "GROUP")
+        throw createCustomError("Chat is not a group chat!", 403, null);
+    const groupChat = await GroupChat.findOne({ chat_id : chatID });
+    if(admin.email != groupChat.admin_email)
+        throw createCustomError("You are not the admin of this group chat!", 403, null);
+    await chat.deleteOne();
+    await groupChat.deleteOne();
 }
