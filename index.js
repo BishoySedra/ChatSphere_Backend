@@ -10,6 +10,8 @@ import friendRoutes from "./src/routes/friend.js";
 import chatRoutes from "./src/routes/chat.js";
 import messageRoutes from './src/routes/message.js';
 import connectDB from "./src/db/connection.js";
+import fileUpload from "./src/helpers/multer.js";
+
 
 import http from "http";
 import { socketConnection } from "./src/helpers/sockets.js";
@@ -36,7 +38,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Parse JSON bodies (as sent by API clients)
+
 app.use(Express.json());
+app.use(fileUpload.single("imageMessage"));
 
 // routes
 app.use(`${process.env.BASE_URL}/profile`, profileRoutes);
