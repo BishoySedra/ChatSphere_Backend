@@ -23,7 +23,7 @@ export const getUserGroupChats = async (req, res,next) => {
   try{
     const { email } = req.params;
     await authorize(req,res,next,email)
-    let chats = await chatService.getUserGroupChats(email)
+    let chats = await chatService.getUserGroupChats(email,req.headers.authorization)
     return res.send({ message: "Group chats of user retreived succesfully!", status: 200, body: chats });
   }catch(err){
     next(err)
