@@ -5,9 +5,6 @@ import app from "../index.js";
 import env from "dotenv";
 env.config();
 
-const registerURL = `${process.env.BASE_URL}/auth/register`;
-const loginURL = `${process.env.BASE_URL}/auth/login`;
-
 const alice = new User("alice", "alice@mail.com", "Password@123");
 const bob = new User("bob", "bob@mail.com", "Password@123");
 
