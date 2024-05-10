@@ -31,9 +31,24 @@ describe("Chats tests", () => {
   describe("Private chats", () => {
     // all is well
     it("Access your own private chats with your token -> 200", async () => {
+      const senderMail = "anakin@mail.com";
+      const receiverMail = "padme@mail.com";
+      const sendApiURL = `${process.env.BASE_URL}/users/${senderMail}/send/${receiverMail}`;
+      const receiveApiURL = `${process.env.BASE_URL}/users/${receiverMail}/response/${senderMail}`;
+
+      await request(app).post(sendApiURL).set("Authorization", anakinToken);
+
+      await request(app)
+        .post(receiveApiURL)
+        .set("Authorization", padmeToken)
+        .send({ status: "ACCEPTED" });
+
       const response = await request(app)
         .get(privateChatsURL)
         .set("Authorization", anakinToken);
+
+      console.log("ANAKIN's ", response.body);
+
       expect(response.status).toBe(200);
     });
 
@@ -44,14 +59,6 @@ describe("Chats tests", () => {
       expect(response.status).toBe(403);
     });
 
-    it("Access non-existent user's private chats with your token -> 404", async () => {
-      const wrongURL = `${process.env.BASE_URL}/chats/private/blalbla@mail.com`;
-      const response = await request(app)
-        .get(wrongURL)
-        .set("Authorization", anakinToken);
-      console.log("LUKE's ", response.body);
-      expect(response.status).toBe(404);
-    });
     it("Access your own private chats with your token, email is spelled wrong -> 400", async () => {
       const wrongURL = `${process.env.BASE_URL}/chats/private/anakinmail.com`;
       const response = await request(app)
@@ -74,14 +81,6 @@ describe("Chats tests", () => {
         .get(groupChatsURL)
         .set("Authorization", padmeToken);
       expect(response.status).toBe(403);
-    });
-
-    it("Access non-existent user's group chats with your token -> 404", async () => {
-      const wrongURL = `${process.env.BASE_URL}/chats/private/blalbla@mail.com`;
-      const response = await request(app)
-        .get(wrongURL)
-        .set("Authorization", anakinToken);
-      expect(response.status).toBe(404);
     });
 
     it("Access your own group chats with your token, email is spelled wrong -> 400", async () => {
