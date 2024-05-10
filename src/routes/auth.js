@@ -11,11 +11,13 @@ router.post(
   authController.register
 );
 
-router.post(
- "/login",
- validate(userSchema.loginSchema), 
- authController.login
-);
+router.post("/login", validate(userSchema.loginSchema), authController.login);
 
+// router to verify email
+router.get(
+  "/verify/:email",
+  validate(userSchema.emailSchema, false),
+  authController.verifyEmail
+);
 
 export default router;
