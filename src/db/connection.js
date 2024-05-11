@@ -42,3 +42,5 @@ async function clearAllCollections(connection){
   }
   console.log("All collections cleared!")
 }
+
+export { clearAllCollections };

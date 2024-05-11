@@ -1,9 +1,13 @@
 import request from "supertest";
 import app from "../index.js";
 import User from "./user.js";
+import mongoose from "mongoose";
+import connetDB, { clearAllCollections } from "../src/db/connection.js";
 
 import env from "dotenv";
 env.config();
+
+await clearAllCollections(mongoose.connection);
 
 const anakin = new User("Alice", "anakin@mail.com", "Password@123");
 const padme = new User("Padme", "padme@mail.com", "Password@123");
