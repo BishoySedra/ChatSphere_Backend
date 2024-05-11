@@ -1,11 +1,20 @@
 import Express from "express";
-import dotenv from "dotenv";
-import authRoutes from "./src/routes/auth.js";
-import errorHandler from "./src/middlewares/errors/errorHandler.js";
-import connectDB from "./src/db/connection.js";
 import cors from "cors";
+import dotenv from "dotenv";
+import { configureEnviromentVariable } from "./src/helpers/enviroment.js";
+import errorHandler from "./src/middlewares/errors/errorHandler.js";
+import notFoundHandler from "./src/middlewares/errors/notFoundHandler.js";
+import authRoutes from "./src/routes/auth.js";
+import profileRoutes from "./src/routes/profile.js";
+import friendRoutes from "./src/routes/friend.js";
+import chatRoutes from "./src/routes/chat.js";
+import messageRoutes from './src/routes/message.js';
+import connectDB from "./src/db/connection.js";
+import fileUpload from "./src/helpers/multer.js";
 
-import { configureEnviromentVariable } from "./src/helpers/enviroment.js"
+
+import http from "http";
+import { socketConnection } from "./src/helpers/sockets.js";
 
 // Load environment variables
 dotenv.config();
@@ -13,37 +22,51 @@ dotenv.config();
 // Create Express app
 const app = new Express();
 
-const allowedOrigins = ['http://localhost:3001'];
+
+const allowedOrigins = ["http://localhost:3001"];
 
 const corsOptions = {
   origin: function (origin, callback) {
     if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
-  }
+  },
 };
 
 app.use(cors(corsOptions));
 
 // Parse JSON bodies (as sent by API clients)
+
 app.use(Express.json());
+app.use(fileUpload.single("imageMessage"));
 
-// define a route handler for the default home page
-app.use(`${process.env.BASE_URL}/users`, authRoutes);
+// routes
+app.use(`${process.env.BASE_URL}/profile`, profileRoutes);
+app.use(`${process.env.BASE_URL}/auth`, authRoutes);
+app.use(`${process.env.BASE_URL}/users`, friendRoutes);
+app.use(`${process.env.BASE_URL}/chats`, chatRoutes);
+app.use(`${process.env.BASE_URL}/messages`, messageRoutes);
+
+// Error handling
 app.use(errorHandler);
+app.use(notFoundHandler);
 
 
+const server = http.createServer(app);
 try {
   const port = process.env.PORT || 3000;
-  app.listen(port, () => {
-    let env = configureEnviromentVariable()
+  server.listen(port, () => {
+    let env = configureEnviromentVariable();
     connectDB(env);
     console.log(`Server listening on port ${port}`);
   });
+  
 } catch (error) {
   console.log(error);
 }
+
+socketConnection(server)
 
 export default app;

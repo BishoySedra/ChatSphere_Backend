@@ -5,8 +5,9 @@ import env from "dotenv";
 env.config();
 
 describe("POST /users/login", () => {
-  const registerURL = `${process.env.BASE_URL}/users/register`;
-  const url = `${process.env.BASE_URL}/users/login`;
+  const registerURL = `${process.env.BASE_URL}/auth/register`;
+  const url = `${process.env.BASE_URL}/auth/login`;
+  const verifyURL = `${process.env.BASE_URL}/auth/verify/test@mail.com`;
   describe("given email and password", () => {
     // all is well
     it("should return 200 OK", async () => {
@@ -15,6 +16,9 @@ describe("POST /users/login", () => {
         email: "test@mail.com",
         password: "Password@123",
       });
+
+      await request(app).get(`${verifyURL}`).send();
+
       const res = await request(app).post(url).send({
         email: "test@mail.com",
         password: "Password@123",
@@ -45,6 +49,7 @@ describe("POST /users/login", () => {
           password: "Password@123",
         });
 
+        await request(app).get(`${verifyURL}`).send();
         const loginResponse = await request(app).post(url).send({
           email: "wrong@mail.com",
           password: "Password@123",
@@ -59,6 +64,7 @@ describe("POST /users/login", () => {
           password: "Password@123",
         });
 
+        await request(app).get(`${verifyURL}`).send();
         const loginResponse = await request(app).post(url).send({
           email: "test@mail.com",
           password: "WrongPassword123",
