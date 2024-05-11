@@ -44,7 +44,7 @@ export const sendMessage = async (
   let receiversEmails = chat.users.filter((user) => user != senderEmail);
   receiversEmails.forEach((receiverEmail) => {
     sockets.sendToOnlineReceivers(
-      toBeSentMessage,
+      {toBeSentMessage, chatID},
       receiverEmail,
       "receivedMessage",
     );
