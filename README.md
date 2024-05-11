@@ -33,7 +33,7 @@ TO BE ADDED:
 * [joi](https://www.npmjs.com/package/joi)
 * [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 * [mongoose](https://www.npmjs.com/package/mongoose)
-* [multer v. 1.4.3](https://www.npmjs.com/package/multer/v/1.4.3) Note: this version is used because some conflice with the latest version
+* [multer v. 1.4.3](https://www.npmjs.com/package/multer/v/1.4.3) Note: this version is used because some conflict with the latest version
 * [nodemailer](https://www.npmjs.com/package/nodemailer)
 * [socket.io](https://www.npmjs.com/package/socket.io)
 * [streamifier](https://www.npmjs.com/package/streamifier)
