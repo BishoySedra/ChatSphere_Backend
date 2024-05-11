@@ -7,13 +7,18 @@ Full-Stack Chat Application Project using ReactJS and NodeJS.
 Currently there are three enviroments
 ```(dev,test,local)```
 
-To be able to use a DB you must use one of the previous enviroments in your script like this:
 
-```npm run dev -- --enviroment=test``` for testing
+## API Documentation
 
-```npm run dev -- --enviroment=dev``` for dev
+For detailed information about the API endpoints and usage, please refer to the [API Documentation](https://documenter.getpostman.com/view/32763635/2sA35MzzRV#e48a33f9-b1ed-4b32-8e2e-304ab8320391).
 
-apply the same thing for other scripts like ``npm test`` or ``npm start``
+## Steps to Run
+
+
+Currently, there are three environments available: `dev`, `test`, and `local`.
+
+To use a database, you must specify one of the available environments in your script. Here's how to do it:
+
 
 TO BE ADDED:
 
@@ -74,3 +79,25 @@ npm run test -- --enviroment=test tests/{fileName}.test.js
 # Example
 npm run test -- --enviroment=test tests/groups.test.js 
 ```
+
+- For testing:
+  ```bash
+  npm run dev -- --environment=test
+  ```
+
+- For development:
+  ```bash
+  npm run dev -- --environment=dev
+  ```
+
+Make sure to apply the same approach for other scripts like `npm test` or `npm start`.
+
+### To Be Added
+
+- For the local environment:
+  ```bash
+  npm run dev -- --environment=local
+  ```
+
+This command will be added for running the application in a local environment.
+
