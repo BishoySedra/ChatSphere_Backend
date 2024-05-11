@@ -66,15 +66,19 @@ export const addUserToGroupChat = async (adminEmail, userEmail, chatID) => {
   await chat.save();
 };
 
-export const getUserGroupChats = async (email) => {
-  const user = await User.findOne({ email: email });
-  if (!user) throw createCustomError("User not found!", 404, null);
-  const chats = await Chat.find({
-    users: { $in: [email] },
-    chat_type: "GROUP",
-  });
-  return chats;
-};
+
+export const getUserGroupChats = async (email,token) => {
+    const user = await User.findOne({ email: email });
+    if (!user) 
+        throw createCustomError("User not found!", 404, null);
+    const chats = await Chat.find({users: { $in : [email] } ,chat_type: "GROUP"}).lean();
+    for(let i=0;i<chats.length;i++){
+        let groupChat = await getGroupChatDetails(chats[i]._id, token);
+        chats[i].groupChatDetails = groupChat;
+    }
+    return chats;
+}
+
 
 export const getGroupChatDetails = async (id, token) => {
   // check if chat_id is valid mongoose
