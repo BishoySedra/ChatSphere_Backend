@@ -61,7 +61,7 @@ There are three different profiles available.
 
 ### Front end
 
-This repo contains the whole backend for ChatSphere, the frontend is in this [repo](), it is also refrenced above.
+This repo contains the whole backend for ChatSphere, the frontend is in this [repo](https://github.com/MazenSamehR/ChatSphere/tree/master), it is also refrenced above.
 
 ---
 
