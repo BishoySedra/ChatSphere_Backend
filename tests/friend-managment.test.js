@@ -1,43 +1,10 @@
 import request from "supertest";
 import app from "../index.js";
+import User from "./user.js";
 
 import env from "dotenv";
 env.config();
 
-const registerURL = `${process.env.BASE_URL}/auth/register`;
-const loginURL = `${process.env.BASE_URL}/auth/login`;
-
-class User {
-  constructor(username, email, password) {
-    this.username = username;
-    this.email = email;
-    this.password = password;
-  }
-
-  register = async () => {
-    const res = await request(app).post(registerURL).send({
-      username: this.username,
-      email: this.email,
-      password: this.password,
-    });
-    console.log("REG" + res.body.message);
-  };
-
-  login = async () => {
-    const res = await request(app).post(loginURL).send({
-      email: this.email,
-      password: this.password,
-    });
-    console.log("LOG" + res.body.message);
-    return res.body;
-  };
-
-  async getToken() {
-    const res = await this.login();
-    const token = res.body;
-    return "Bearer " + token;
-  }
-}
 
 const alice = new User("Alice", "alice@mail.com", "Password@123");
 const bob = new User("Bob", "bob@mail.com", "Password@123");
@@ -45,16 +12,33 @@ const bob = new User("Bob", "bob@mail.com", "Password@123");
 await alice.register();
 await bob.register();
 
+const aliceMail = alice.email;
+const bobMail = bob.email;
+
+
+
+//await request(app).get(`${bobVerifyURL}`).send();
+
 const aliceToken = await alice.getToken();
 const bobToken = await bob.getToken();
+
+
+
 
 const john = new User("John", "john@mail.com", "Password@123");
 await john.register();
 const johnToken = await john.getToken();
+const johnMail = john.email;
+const johnVerifyURL = `${process.env.BASE_URL}/auth/verify/${johnMail}`;
 
 const jane = new User("Jane", "jane@mail.com", "Password@123");
 await jane.register();
 const janeToken = await jane.getToken();
+const janeMail = jane.email;
+const janeVerifyURL = `${process.env.BASE_URL}/auth/verify/${janeMail}`;
+
+await request(app).get(`${johnVerifyURL}`).send();
+await request(app).get(`${janeVerifyURL}`).send();
 
 console.log(aliceToken);
 

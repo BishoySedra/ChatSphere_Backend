@@ -16,7 +16,7 @@ async function connectDB(envVariable) {
         process.env.MONGODB_CONNECTION_URL_TEST
       );
 
-      await clearAllCollections(mongoose.connection)
+      //await clearAllCollections(mongoose.connection)
 
     }
     else{
