@@ -17,9 +17,13 @@ Currently, there are three environments available: `dev`, `test`, and `local`.
 
 To use a database, you must specify one of the available environments in your script. Here's how to do it:
 
+```bash
+npm run dev -- --environment=dev
+```
+
 TO BE ADDED:
 
-```npm run dev -- --enviroment=local``` for local
+```npm run dev -- --environment=local``` for local
 
 ### Libraries and dependencies
 
@@ -69,6 +73,12 @@ There are three different profiles available.
 ### Front end
 
 This repo contains the whole backend for ChatSphere, the frontend is in this [repo](https://github.com/MazenSamehR/ChatSphere/tree/master), it is also refrenced above.
+
+---
+
+### Technical Requiremnt Document
+
+![](./.imgs/TRD.png)
 
 ---
 

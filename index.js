@@ -1,7 +1,7 @@
 import Express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { configureEnviromentVariable } from "./src/helpers/enviroment.js";
+import { configureEnvironmentVariable } from "./src/helpers/enviroment.js";
 import errorHandler from "./src/middlewares/errors/errorHandler.js";
 import notFoundHandler from "./src/middlewares/errors/notFoundHandler.js";
 import authRoutes from "./src/routes/auth.js";
@@ -58,7 +58,7 @@ const server = http.createServer(app);
 try {
   const port = process.env.PORT || 3000;
   server.listen(port, () => {
-    let env = configureEnviromentVariable();
+    let env = configureEnvironmentVariable();
     connectDB(env);
     console.log(`Server listening on port ${port}`);
   });
