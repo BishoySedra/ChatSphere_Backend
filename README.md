@@ -7,18 +7,15 @@ Full-Stack Chat Application Project using ReactJS and NodeJS.
 Currently there are three enviroments
 ```(dev,test,local)```
 
-
 ## API Documentation
 
 For detailed information about the API endpoints and usage, please refer to the [API Documentation](https://documenter.getpostman.com/view/32763635/2sA35MzzRV#e48a33f9-b1ed-4b32-8e2e-304ab8320391).
 
 ## Steps to Run
 
-
 Currently, there are three environments available: `dev`, `test`, and `local`.
 
 To use a database, you must specify one of the available environments in your script. Here's how to do it:
-
 
 TO BE ADDED:
 
@@ -28,28 +25,33 @@ TO BE ADDED:
 
 #### Dependencies
 
-* [bcryptjs](https://www.npmjs.com/package/bcryptjs)
-* [body-parser](https://www.npmjs.com/package/body-parser)
-* [cloudinary](https://www.npmjs.com/package/cloudinary)
-* [commander](https://www.npmjs.com/package/commander)
-* [cors](https://www.npmjs.com/package/cors)
-* [dotenv](https://www.npmjs.com/package/dotenv)
-* [express](https://www.npmjs.com/package/express)
-* [joi](https://www.npmjs.com/package/joi)
-* [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
-* [mongoose](https://www.npmjs.com/package/mongoose)
-* [multer v. 1.4.3](https://www.npmjs.com/package/multer/v/1.4.3) Note: this version is used because some conflict with the latest version
-* [nodemailer](https://www.npmjs.com/package/nodemailer)
-* [socket.io](https://www.npmjs.com/package/socket.io)
-* [streamifier](https://www.npmjs.com/package/streamifier)
+| Library             | Version   |
+|---------------------|-----------|
+| [bcryptjs](https://www.npmjs.com/package/bcryptjs)          | 2.4.3    |
+| [body-parser](https://www.npmjs.com/package/body-parser)    | 1.20.2   |
+| [cloudinary](https://www.npmjs.com/package/cloudinary)      | 2.2.0    |
+| [commander](https://www.npmjs.com/package/commander)        | 12.0.0   |
+| [cors](https://www.npmjs.com/package/cors)                  | 2.8.5    |
+| [dotenv](https://www.npmjs.com/package/dotenv)              | 16.4.5   |
+| [express](https://www.npmjs.com/package/express)            | 4.19.2   |
+| [joi](https://www.npmjs.com/package/joi)                    | 17.12.3  |
+| [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)  | 9.0.2    |
+| [mongoose](https://www.npmjs.com/package/mongoose)          | 8.3.1    |
+| [multer](https://www.npmjs.com/package/multer/v/1.4.3)      | 1.4.3    |
+| [nodemailer](https://www.npmjs.com/package/nodemailer)      | 6.9.13   |
+| [socket.io](https://www.npmjs.com/package/socket.io)        | 4.7.5    |
+| [streamifier](https://www.npmjs.com/package/streamifier)    | 0.1.1    |
 
 #### Dev Dependencies
 
-* [jest](https://www.npmjs.com/package/jest)
-* [nodemon](https://www.npmjs.com/package/nodemon)
-* [supertest](https://www.npmjs.com/package/supertest)
+| Library             | Version   |
+|---------------------|-----------|
+| [jest](https://www.npmjs.com/package/jest)                 | 29.7.0   |
+| [nodemon](https://www.npmjs.com/package/nodemon)           | 3.1.0    |
+| [supertest](https://www.npmjs.com/package/supertest)       | 6.3.4    |
 
 ### **IMPORTANT**
+
 The `.env` contains all environment variables needed to run the project, a `.example.env` file is present with the fields needed, create a `.env` file based on the example and fill the fields with your credentials, **don't share these credentials publicly**
 
 ---
@@ -81,11 +83,13 @@ npm run test -- --enviroment=test tests/groups.test.js
 ```
 
 - For testing:
+
   ```bash
   npm run dev -- --environment=test
   ```
 
 - For development:
+
   ```bash
   npm run dev -- --environment=dev
   ```
@@ -95,9 +99,9 @@ Make sure to apply the same approach for other scripts like `npm test` or `npm s
 ### To Be Added
 
 - For the local environment:
+
   ```bash
   npm run dev -- --environment=local
   ```
 
 This command will be added for running the application in a local environment.
-
