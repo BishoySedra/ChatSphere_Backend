@@ -1,5 +1,7 @@
 # ChatSphere
 
+![](.imgs/logo.png)
+
 Full-Stack Chat Application Project using ReactJS and NodeJS.
 
 ### STEPS TO RUN
