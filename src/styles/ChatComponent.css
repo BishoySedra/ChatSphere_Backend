@@ -1,0 +1,29 @@
+*{
+    display: inline,
+}
+.FriendButton{
+    width: 305;
+    height: 91;
+    position: "relative";
+}
+
+.Rectangle13{
+    width: 305;
+    height: 91;
+    left: 0;
+    top: 0;
+    position: "absolute";
+    background: "#FCFCFC";
+    border-radius: 10;
+}
+
+
+/* .Ellipse8{
+    width: 48,
+          height: 48,
+          left: 17,
+          top: 22,
+          position: "absolute",
+          background: "#E3DFDF",
+          borderRadius: 9999;
+} */
