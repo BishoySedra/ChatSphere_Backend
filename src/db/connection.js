@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 async function connectDB(envVariable) {
-  console.log("HERE");
   try {
     let connection
     if(envVariable === "dev")
@@ -42,3 +41,5 @@ async function clearAllCollections(connection){
   }
   console.log("All collections cleared!")
 }
+
+export { clearAllCollections };

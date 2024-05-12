@@ -1,9 +1,13 @@
 import request from "supertest";
 import app  from "../index.js";
+import mongoose from "mongoose";
+import connetDB, { clearAllCollections } from "../src/db/connection.js";
 
 import env from "dotenv"
- env.config()
+env.config()
 
+ await clearAllCollections(mongoose.connection);
+ 
 describe("POST /users/register", () => {
   describe("given a username, email and password", () => {
     const url = `${process.env.BASE_URL}/auth/register`;

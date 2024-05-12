@@ -84,7 +84,6 @@ export const getAllFriends = async (email) => {
         throw createCustomError("User not found!", 404,null)
     }
     let userFriendsIds = user.friends
-    console.log(userFriendsIds)
     let friendsDetails = []
     for(let friendId of userFriendsIds) {
         let friend = await User.findById(friendId)
