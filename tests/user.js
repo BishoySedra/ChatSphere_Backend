@@ -46,7 +46,7 @@ class User {
     const res = await request(app)
       .post(sendFriendRequestURL)
       .set("Authorization", await this.getToken());
-    console.log(`SEND ${this.email} ${receiverMail} ` + res.text);
+    //console.log(`SEND ${this.email} ${receiverMail} ` + res.text);
   };
 
   respondToFriendRequest = async (senderMail, state) => {
@@ -56,7 +56,7 @@ class User {
       .post(respondToFriendRequestURL)
       .set("Authorization", await this.getToken())
       .send({ status: state });
-    console.log(`RESPOND ${this.email} ${senderMail} ` + res.text);
+    //console.log(`RESPOND ${this.email} ${senderMail} ` + res.text);
   };
 
   unfriend = async (friendEmail) => {
@@ -66,11 +66,12 @@ class User {
       .set("Authorization", await this.getToken());
   };
 
-  getPrivateChats = async (mail) => {
+  getPrivateChats = async (mail = this.email) => {
     const privateChatsURL = `${process.env.BASE_URL}/chats/private/${mail}`;
     const mfResponse = await request(app)
       .get(privateChatsURL)
       .set("Authorization", await this.getToken());
+    return mfResponse.body.body[0]._id;
     //console.log("GET" + mfResponse.text);
   };
 

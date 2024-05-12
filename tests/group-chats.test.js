@@ -360,7 +360,7 @@ describe("Group chats tests", () => {
         .send({
           email: elizabeth.email,
         });
-      console.log("DELETE GROUP ", res.body);
+      //console.log("DELETE GROUP ", res.body);
       expect(res.status).toBe(400);
     });
 

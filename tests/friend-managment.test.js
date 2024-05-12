@@ -310,7 +310,7 @@ describe("Friend Management", () => {
       const res = await request(app)
         .get(`${process.env.BASE_URL}/users/evil@mail.com/friends`)
         .set("Authorization", aliceToken);
-      console.log("GET ALL FRIENDS NON-EXISTING USER ", res.body);
+      //console.log("GET ALL FRIENDS NON-EXISTING USER ", res.body);
       expect(res.statusCode).toEqual(403);
     });
   });

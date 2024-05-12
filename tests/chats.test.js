@@ -51,7 +51,7 @@ describe("Chats tests", () => {
         .get(privateChatsURL)
         .set("Authorization", anakinToken);
 
-      console.log("ANAKIN's ", response.body);
+      //console.log("ANAKIN's ", response.body);
 
       expect(response.status).toBe(200);
     });
