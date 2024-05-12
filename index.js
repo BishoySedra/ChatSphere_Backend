@@ -23,7 +23,7 @@ dotenv.config();
 const app = new Express();
 
 
-const allowedOrigins = ["http://localhost:3001"];
+const allowedOrigins = [process.env.CLIENT_URL];
 
 const corsOptions = {
   origin: function (origin, callback) {

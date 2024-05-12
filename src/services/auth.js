@@ -10,9 +10,6 @@ dotenv.config();
 export const registerService = async (userData, domain, protocol) => {
   const { username, email, password } = userData;
 
-  console.log("domain", domain);
-  console.log("protocol", protocol);
-
   // check if the user already exists using mongoose
   const existedUser = await User.findOne({ email });
 
@@ -34,7 +31,6 @@ export const registerService = async (userData, domain, protocol) => {
 
   // send email to the user
   const verificationLink = `${protocol}://${domain}${process.env.BASE_URL}/auth/verify/${email}`;
-  console.log("verificationLink", verificationLink);
   const subject = "Account Verification";
   const text = `Click the button below to verify your account:`;
   const html = `
