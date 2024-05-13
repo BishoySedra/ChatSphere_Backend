@@ -4,7 +4,7 @@ import { baseUrl } from "../../helpers/urls";
 import "../../styles/SignUp.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useNavigate } from "react-router-dom";
-import logo from "../../images/logo.png" 
+import logo from "../../images/logo.png";
 function SignUp() {
   const url = `${baseUrl}/auth/register`;
   const navigate = useNavigate();
@@ -66,26 +66,28 @@ function SignUp() {
   }
 
   if (localStorage.getItem("token")) navigate("/homepage");
- 
+
   const handleClick = () => {
     navigate("/");
   };
   return (
     <div className="signup">
       <div className="overlap">
-      <div className="container">
-      <div className="row justify-content-center">
-       <div className="col-md-6">
-          <div className="image wi">
-               <img src={logo} alt="" className="img-fluid" />
-             </div>
-           </div>
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-6">
+              <div className="image wi">
+                <img src={logo} alt="" className="img-fluid" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div className="info">
         <h1 className="welcome">Welcome,</h1>
-        <h3 className="postwelcome">Please fill the following information to sign up</h3>
+        <h3 className="postwelcome">
+          Please fill the following information to sign up
+        </h3>
         <div className="signup-info">
           <form onSubmit={(e) => submit(e)}>
             <input
@@ -94,7 +96,7 @@ function SignUp() {
               value={data.email}
               type="text"
               placeholder="Email"
-              className={errors.email && "error"}
+              className={errors.email && "errortext"}
             />
             {errors.email && <div className="error">{errors.email}</div>}
             <br />
@@ -104,7 +106,7 @@ function SignUp() {
               value={data.username}
               type="text"
               placeholder="Username"
-              className={errors.username && "error"}
+              className={errors.username && "errortext"}
             />
             {errors.username && <div className="error">{errors.username}</div>}
             <br />
@@ -114,7 +116,7 @@ function SignUp() {
               value={data.password}
               type="password"
               placeholder="Password"
-              className={errors.password && "error"}
+              className={errors.password && "errortext"}
             />
             {errors.password && <div className="error">{errors.password}</div>}
             <br />
@@ -129,9 +131,11 @@ function SignUp() {
           </form>
         </div>
       </div>
-      <button className="login" onClick={handleClick}>
-         Already have an account?<span className="different-color">Login</span>
+      <div className="logindiv">
+        <button className="login" onClick={handleClick}>
+          Already have an account?<span className="different-color">Login</span>
         </button>
+      </div>
     </div>
   );
 }

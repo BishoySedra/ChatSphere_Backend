@@ -1,1 +1,1 @@
-export const baseUrl = "https://chatsphere-pjik.onrender.com/api/v1"
+export const baseUrl = "http://localhost:3000/api/v1"

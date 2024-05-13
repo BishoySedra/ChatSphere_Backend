@@ -1,148 +1,233 @@
 .login .overlap {
-    background: var(--third-green, #135D66);
-    border-radius: 0px 10px 10px 0px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    height: 100vh;
-    width: 30vw; 
-    left: 0;
-    position: absolute;
-    top: 0;
+  background: var(--third-green, #135d66);
+  border-radius: 0px 10px 10px 0px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  height: 100vh;
+  width: 30vw;
+  left: 0;
+  position: absolute;
+  top: 0;
+  overflow-x: hidden;
 }
 
 .overlap .logo {
-    color: #000000;
-    font-family: "Sofia Sans-Regular", Helvetica;
-    font-size: 3vw; 
-    font-weight: 400;
-    left: 5%; 
-    position: absolute;
-    top: 10%; 
+  color: #000000;
+  font-family: "Sofia Sans-Regular", Helvetica;
+  font-size: 3vw;
+  font-weight: 400;
+  left: 5%;
+  position: absolute;
+  top: 10%;
 }
 
 @font-face {
-    font-family: 'Sofia-Regular';
-    src: url('../fonts/Sofia-Regular.ttf') format('truetype'),
-
+  font-family: "Sofia-Regular";
+  src: url("../fonts/Sofia-Regular.ttf") format("truetype");
 }
 
 .login .welcome {
-    color: #135D66;
-    /* font-family: "Sofia-Regular", sans-serif; */
-    font-size: 6vw;
-    font-weight: 400;
-    left: 55%;
-    transform: translateX(-63%); 
-    line-height: 30%;
-    position: absolute;
-    top: 10%;
-    white-space: nowrap;
-    text-align: start;
+  color: #135d66;
+  /* font-family: "Sofia-Regular", sans-serif; */
+  font-size: 6vw;
+  font-weight: 400;
+  left: 55%;
+  transform: translateX(-63%);
+  line-height: 30%;
+  position: absolute;
+  top: 10%;
+  white-space: nowrap;
+  text-align: start;
 }
 
 .login .postwelcome {
-    /* font-family: "Sofia-Regular", sans-serif; */
-    font-size: 2vw;
-    font-weight: 400;
-    left: 43%;
-    transform: translateX(-50%); 
-    line-height: 30%;
-    position: absolute;
-    top: 20%;
-    white-space: nowrap;
-    text-align: start;
+  font-size: 2vw;
+  font-weight: 400;
+  left: 43%;
+  transform: translateX(-50%);
+  line-height: 30%;
+  position: absolute;
+  top: 20%;
+  white-space: nowrap;
+  text-align: start;
 }
 
 .login .login-info {
-    height: 40vh; 
-    width: 40vw; 
-    left: 35%; 
-    position: absolute;
-    top: 30%; 
+  height: 40vh;
+  width: 40vw;
+  left: 35%;
+  position: absolute;
+  top: 30%;
 }
 
 .login #username,
 .login #email,
 .login #password {
-    width: 90%; 
-    height: 7vh; 
-    padding: 1vh 2vw; 
-    margin: 2vh 0; 
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    box-sizing: border-box;
+  width: 90%;
+  height: 7vh;
+  padding: 1vh 2vw;
+  margin: 2vh 0;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  box-sizing: border-box;
 }
 
 .signupbutton {
-    border-radius: 10px;
-    background: var(--black, #262626);
-    color: #FFF;
-    width: 12vw; 
-    height: 10vh; 
-    font-size: 2vw; 
-    margin: 2vh 0;
-    position: fixed;
-    left: 47%;
+  border-radius: 10px;
+  background: var(--black, #262626);
+  color: #fff;
+  width: 12vw;
+  height: 10vh;
+  font-size: 2vw;
+  margin: 2vh 0;
+  position: fixed;
+  left: 47%;
 }
 
 ::placeholder {
-    color: #26262699;
-    font-family: "Sofia Sans-Regular", Helvetica;
-    font-size:120%;
-    font-weight: 400;
-    text-align: start;
-    padding-top: 80%;
+  color: #26262699;
+  font-family: "Sofia Sans-Regular", Helvetica;
+  font-size: 120%;
+  font-weight: 400;
+  text-align: start;
+  padding-top: 80%;
 }
-
 
 .login .error {
-    color: red;
-    font-size: 20px;
-    margin-top: 5px;
+  color: red;
+  font-size: 20px;
 }
-  
+.login .errortext {
+  color: red;
+  font-size: 20px;
+}
+
 .login input {
-    font-family: "Sofia Sans-Regular", Helvetica;
-    font-size: 20px; 
-    color: #262626; 
+  font-family: "Sofia Sans-Regular", Helvetica;
+  font-size: 20px;
+  color: #262626;
 }
 
-.login .signup{
-
-    font-size: 1.5vw;
-    font-weight: 400;
-    left: 43%;
-    transform: translateX(-50%); 
-    line-height: 30%;
-    position: absolute;
-    bottom: 30%;
-    white-space: nowrap;
-    text-align: start;
-    border: 0 ;
-    background-color: transparent;
-
+.login .signup {
+  font-size: 1.5vw;
+  font-weight: 400;
+  left: 43%;
+  transform: translateX(-50%);
+  line-height: 30%;
+  position: absolute;
+  bottom: 30%;
+  white-space: nowrap;
+  text-align: start;
+  border: 0;
+  background-color: transparent;
 }
-.login .different-color{
+.signupdiv {
+  position: absolute;
+  bottom: 18%;
+  left: 43%;
+  transform: translateX(-50%);
+}
 
-    font-size: 1.5vw;
-    color: #135D66;
-    font-weight: bold;
-    left: 115%;
-    transform: translateX(-50%); 
-    line-height: 30%;
-    position: absolute;
-    bottom: 30%;
-    white-space: nowrap;
-    text-align: start;
-    border: 0 ;
-    background-color: transparent;
-
-
+.login .different-color {
+  font-size: 1.5vw;
+  color: #135d66;
+  font-weight: bold;
+  left: 115%;
+  transform: translateX(-50%);
+  line-height: 30%;
+  position: absolute;
+  bottom: 30%;
+  white-space: nowrap;
+  text-align: start;
+  border: 0;
+  background-color: transparent;
 }
 .overlap .image {
-    width: 200%; /* Make the image responsive */
-    height: auto; /* Maintain aspect ratio */
-    position: relative; /* Position relative to its normal position in the document flow */
-    transform: translateX(-50%); /* Center the logo horizontally */
-    top: 50%;
-    left: 90%;
+  width: 200%;
+  height: auto;
+  position: relative;
+  transform: translateX(-50%);
+  top: 50%;
+  left: 90%;
+}
+
+.login .overlap {
+  background: var(--third-green, #135d66);
+  border-radius: 0px 10px 10px 0px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  height: 100vh;
+  width: 30vw;
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
+@font-face {
+  font-family: "Sofia-Regular";
+  src: url("../fonts/Sofia-Regular.ttf") format("truetype");
+}
+
+@media screen and (max-width: 768px) {
+  .login .overlap {
+    width: 100vw;
   }
+
+  .login .overlap .image {
+    max-width: 100%;
+    height: auto;
+    left: 49%;
+  }
+  .login .welcome {
+    font-size: 8vw;
+    left: 60%;
+    transform: translateX(-50%);
+    color: #fff;
+    text-align: center;
+  }
+
+  .login .postwelcome {
+    font-weight: bold;
+    font-size: 3vw;
+    left: 60%;
+    transform: translateX(-50%);
+    color: white;
+    top: 25%;
+    text-align: center;
+  }
+
+  .login .login-info {
+    height: auto;
+    width: 80vw;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .signupdiv {
+    color: #fff;
+    position: absolute;
+    bottom: 5%;
+    left: 40%;
+    transform: translateX(-50%);
+  }
+  .login .errortext {
+    color: red;
+    font-size: 20px;
+  }
+  .login .error {
+    color: #e3fef7;
+    font-size: 20px;
+  }
+  .signupbutton {
+    font-size: 4vw;
+    width: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .signupdiv .signup {
+    font-size: 3vw;
+    color: white;
+  }
+  .signupdiv .signup .different-color {
+    color: white;
+    font-size: 3vw;
+  }
+}
