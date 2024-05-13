@@ -4,9 +4,9 @@ import { baseUrl } from "../../helpers/urls";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthProvider";
-import {socket} from "../socket/socket.js";
+import { socket } from "../socket/socket.js";
 import "../../styles/Login.css";
-import logo from "../../images/logo.png" 
+import logo from "../../images/logo.png";
 export const emailContext = createContext();
 
 function Login() {
@@ -33,7 +33,6 @@ function Login() {
 
   const [loading, setLoading] = useState(false);
 
-
   function submit(e) {
     e.preventDefault();
 
@@ -52,8 +51,8 @@ function Login() {
         let tokenValue = "Bearer " + res.data.body;
         localStorage.setItem("token", tokenValue);
         setErrors({});
-        socket.emit("successfulLogin", {email: data.email});
-        
+        socket.emit("successfulLogin", { email: data.email });
+
         await auth.redirectEmail(data.email);
       })
       .catch((err) => {
@@ -78,8 +77,6 @@ function Login() {
       });
   }
 
-
-
   function handle(e) {
     const newdata = { ...data };
     newdata[e.target.id] = e.target.value || "";
@@ -98,22 +95,20 @@ function Login() {
     return <Navigate to="/homepage" />;
   }
 
-
-  
-const handleClick = () => {
-  navigate("/signup");
-};
+  const handleClick = () => {
+    navigate("/signup");
+  };
 
   return (
     <div className="login">
       <div className="overlap">
-      <div className="container">
-      <div className="row justify-content-center">
-       <div className="col-md-6">
-          <div className="image wi">
-               <img src={logo} alt="" className="img-fluid" />
-             </div>
-           </div>
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-6">
+              <div className="image wi">
+                <img src={logo} alt="" className="img-fluid" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -128,7 +123,7 @@ const handleClick = () => {
               value={data.email}
               type="text"
               placeholder="Email"
-              className={errors.email && "error"}
+              className={errors.email && "errortext"}
             />
             {errors.email && <div className="error">{errors.email}</div>}
             <br />
@@ -138,7 +133,7 @@ const handleClick = () => {
               value={data.password}
               type="password"
               placeholder="Password"
-              className={errors.password && "error"}
+              className={errors.password && "errortext"}
             />
             {errors.password && <div className="error">{errors.password}</div>}
             <br />
@@ -151,11 +146,13 @@ const handleClick = () => {
             </button>
           </form>
         </div>
-        <button className="signup" onClick={handleClick}>
-         Don’t have an account? <span className="different-color">SignUp</span>
-        </button>
+        <div className="signupdiv">
+          <button className="signup" onClick={handleClick}>
+            Don’t have an account?{" "}
+            <span className="different-color">SignUp</span>
+          </button>
+        </div>
       </div>
-    
     </div>
   );
 }
