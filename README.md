@@ -4,28 +4,41 @@
 
 Full-Stack Chat Application Project using ReactJS and NodeJS.
 
-### STEPS TO RUN
+---
 
-Currently there are three enviroments
-```(dev,test,local)```
-
-## API Documentation
+### API Documentation
 
 For detailed information about the API endpoints and usage, please refer to the [API Documentation](https://documenter.getpostman.com/view/32763635/2sA35MzzRV#e48a33f9-b1ed-4b32-8e2e-304ab8320391).
 
-## Steps to Run
+---
+
+### Steps to Run
 
 Currently, there are three environments available: `dev`, `test`, and `local`.
 
 To use a database, you must specify one of the available environments in your script. Here's how to do it:
 
-```bash
-npm run dev -- --environment=dev
-```
+- For testing:
 
-TO BE ADDED:
+  ```bash
+  npm run dev -- --environment=test
+  ```
 
-```npm run dev -- --environment=local``` for local
+- For development:
+
+  ```bash
+  npm run dev -- --environment=dev
+  ```
+
+- For the local environment:
+
+  ```bash
+  npm run dev -- --environment=local
+  ```
+
+Make sure to apply the same approach for other scripts like `npm test` or `npm start`.
+
+---
 
 ### Libraries and dependencies
 
@@ -94,26 +107,20 @@ npm run test -- --enviroment=test tests/{fileName}.test.js
 npm run test -- --enviroment=test tests/groups.test.js 
 ```
 
-- For testing:
+---
 
-  ```bash
-  npm run dev -- --environment=test
-  ```
+### Note about the local environment
 
-- For development:
+A docker compose file `docker-compose.yaml` is present this configures MongoDB in a docker conatiner with port mapping and volume mapping to save the data, change username and password to your preference.
 
-  ```bash
-  npm run dev -- --environment=dev
-  ```
+Add the connection string to your `.env` file in the `MONGODB_CONNECTION_URL_LOCAL` field.
 
-Make sure to apply the same approach for other scripts like `npm test` or `npm start`.
+It should be like this
 
-### To Be Added
+```mongosh
+mongodb://<username>:<password>@localhost:27017/ChatSphere
+```
 
-- For the local environment:
+**Remove the `<>` around the username and password**
 
-  ```bash
-  npm run dev -- --environment=local
-  ```
-
-This command will be added for running the application in a local environment.
+---

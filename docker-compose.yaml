@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: ChatSphere
+    environment:
+      # Uncomment the following environment variables to set the username and password
+      #- MONGO_INITDB_ROOT_USERNAME=admin
+      #- MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=ChatSphere
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongodb_data:
+    driver: local
+
