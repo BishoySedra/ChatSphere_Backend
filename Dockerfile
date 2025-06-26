@@ -16,5 +16,5 @@ COPY . .
 # Expose the port your app runs on (adjust if different)
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "run" "start:dev"]
+# Start the application "npm run start:dev"
+CMD ["npm", "run", "start:dev"]
