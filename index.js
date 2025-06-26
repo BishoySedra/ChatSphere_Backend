@@ -12,7 +12,6 @@ import messageRoutes from './src/routes/message.js';
 import connectDB from "./src/db/connection.js";
 import fileUpload from "./src/helpers/multer.js";
 
-
 import http from "http";
 import { socketConnection } from "./src/helpers/sockets.js";
 
@@ -21,7 +20,6 @@ dotenv.config();
 
 // Create Express app
 const app = new Express();
-
 
 const allowedOrigins = [process.env.CLIENT_URL];
 
@@ -62,7 +60,7 @@ try {
     connectDB(env);
     console.log(`Server listening on port ${port}`);
   });
-  
+
 } catch (error) {
   console.log(error);
 }
