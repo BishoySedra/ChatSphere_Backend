@@ -124,3 +124,7 @@ mongodb://<username>:<password>@localhost:27017/ChatSphere
 **Remove the `<>` around the username and password**
 
 ---
+
+### Demo Video
+https://github.com/user-attachments/assets/f481b8bd-0aa9-4395-a28d-683b6eb71449
+
