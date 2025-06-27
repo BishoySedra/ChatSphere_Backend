@@ -53,7 +53,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `https://chatsphere-api.onrender.com`, // Use the base URL from environment variables
+        url: `${Depl_API_URL}${process.env.BASE_URL}`, // Use the base URL from environment variables
         description: "Production server",
       },
     ],
