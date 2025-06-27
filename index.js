@@ -11,6 +11,8 @@ import chatRoutes from "./src/routes/chat.js";
 import messageRoutes from './src/routes/message.js';
 import connectDB from "./src/db/connection.js";
 import fileUpload from "./src/helpers/multer.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerJsDoc from "swagger-jsdoc";
 
 import http from "http";
 import { socketConnection } from "./src/helpers/sockets.js";
@@ -40,6 +42,42 @@ app.use(cors(corsOptions));
 app.use(Express.json());
 app.use(fileUpload.single("imageMessage"));
 
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "ChatSphere API Documentation",
+      version: "1.0.0",
+      description: "API documentation for ChatSphere, a chat application.",
+    },
+    servers: [
+      {
+        url: `https://chatsphere-api.onrender.com`, // Use the base URL from environment variables
+        description: "Production server",
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+  apis: ["./src/routes/*.js"], // Path to the route files
+};
+
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 // routes
 app.use(`${process.env.BASE_URL}/profile`, profileRoutes);
 app.use(`${process.env.BASE_URL}/auth`, authRoutes);
@@ -59,6 +97,7 @@ try {
     let env = configureEnvironmentVariable();
     connectDB(env);
     console.log(`Server listening on port ${port}`);
+    console.log(`Swagger documentation available at: https://chatsphere-api.onrender.com/docs`);
   });
 
 } catch (error) {
