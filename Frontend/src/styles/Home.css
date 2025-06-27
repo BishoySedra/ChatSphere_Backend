@@ -1,5 +1,0 @@
-@media (min-width: 768px) {
-    .chat-column {
-      flex: 0 0 83%; /* Keeps the column width fixed at 25% */
-    }
-  }
