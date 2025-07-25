@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 import dotenv from "dotenv";
 dotenv.config();
 export let loggedInUsers = []//{email: [array of socket ids]}
-let io 
+let io
 
 
 const addLoggedInUser = (email, socketId) => {
@@ -23,11 +23,11 @@ const removeLoggedInUser = (email, socketId) => {
   }
 }
 
-export const sendToOnlineReceivers = (data,currentlyOnlineEmail,eventName) => {
-    let receiverData = loggedInUsers.find(user => user.email === currentlyOnlineEmail)
-    if(receiverData) {
-        receiverData.socketId.forEach((receiverSocket) => {
-        io.to(receiverSocket).emit(eventName, data)
+export const sendToOnlineReceivers = (data, currentlyOnlineEmail, eventName) => {
+  let receiverData = loggedInUsers.find(user => user.email === currentlyOnlineEmail)
+  if (receiverData) {
+    receiverData.socketId.forEach((receiverSocket) => {
+      io.to(receiverSocket).emit(eventName, data)
     })
   }
 }
@@ -36,11 +36,11 @@ export const sendToOnlineReceivers = (data,currentlyOnlineEmail,eventName) => {
 export const socketConnection = (server) => {
   io = new Server(server, {
     cors: {
-      origin: [process.env.CLIENT_URL],
+      origin: [process.env.CLIENT_URL, "http://localhost:3000"]
     },
   });
   io.on("connection", (socket) => {
-    
+
     socket.on("successfulLogin", ({ email }) => {
       addLoggedInUser(email, socket.id);
     });
