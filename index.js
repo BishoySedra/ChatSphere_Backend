@@ -24,7 +24,7 @@ dotenv.config();
 const app = new Express();
 
 const Depl_API_URL = 'https://chatsphere-api.onrender.com'
-const allowedOrigins = [process.env.CLIENT_URL, Depl_API_URL];
+const allowedOrigins = [process.env.CLIENT_URL, Depl_API_URL, "http://localhost:3000"];
 
 const corsOptions = {
   origin: function (origin, callback) {
