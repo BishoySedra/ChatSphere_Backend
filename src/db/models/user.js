@@ -17,7 +17,12 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   image_url: {
-    type: String
+    type: String,
+    default: null
+  },
+  joinedAt: {
+    type: Date,
+    default: Date.now,
   },
   password: {
     type: String,
