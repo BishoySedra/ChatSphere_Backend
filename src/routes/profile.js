@@ -2,7 +2,6 @@ import { Router } from "express";
 import * as userController from "../controllers/profile.js";
 import validate from "../middlewares/validator/validation.js";
 import * as userSchema from "../middlewares/validator/schemas/userSchema.js";
-import { authorize } from "../middlewares/validator/authorize.js";
 
 /**
  * @swagger
@@ -101,6 +100,42 @@ import { authorize } from "../middlewares/validator/authorize.js";
  *         description: User not found
  */
 
+/**
+ * @swagger
+ * /profile/change-image/{email}:
+ *   patch:
+ *     summary: Change profile image by email
+ *     tags: [Profile]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Email of the user
+ *       - in: body
+ *         name: image
+ *         description: New profile image URL to be set
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             imageUrl:
+ *               type: string
+ *               example: https://example.com/images/profile.jpg
+ *     responses:
+ *       200:
+ *         description: Profile image updated successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Profile image updated successfully
+ *       400:
+ *         description: Invalid email or image URL format
+ *       404:
+ *         description: User not found
+ */
+
 const router = Router();
 
 router.get("/:email",
@@ -115,6 +150,9 @@ router.patch("/change-username/:email",
     validate(userSchema.changedUsernameSchema),
     userController.changeUsernameByEmail);
 
-
+router.patch("/change-image/:email",
+    validate(userSchema.emailSchema, false),
+    validate(userSchema.changedImageSchema),
+    userController.changeImageByEmail);
 
 export default router
