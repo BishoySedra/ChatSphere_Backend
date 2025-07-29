@@ -42,7 +42,6 @@ app.use(cors(corsOptions));
 
 app.use(Express.json());
 app.use(fileUpload.single("imageMessage"));
-app.use(fileUpload.single("profilePicture"));
 
 const swaggerOptions = {
   swaggerDefinition: {

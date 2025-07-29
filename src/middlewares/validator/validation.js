@@ -14,10 +14,12 @@ function validate(schema, isBody = true) {
       next();
     } catch (error) {
       res.status(400).json({
-        body: error.details.map((detail) => ({
-          message: detail.message,
-          field: detail.path.join("."),
-        })),
+        body: error.details
+          ? error.details.map((detail) => ({
+            message: detail.message,
+            field: detail.path.join("."),
+          }))
+          : "Validation error details are unavailable",
         status: 400,
         message: "Validation Error",
       });
