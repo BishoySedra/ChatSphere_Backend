@@ -28,6 +28,11 @@ export const registerSchema = Joi.object({
         "Password must have at least length of 8, have at least one lowercase letter, one uppercase letter, one number, and one special character",
       "any.required": "Password is required",
     }),
+  image_url: Joi.string().uri().messages({
+    "string.base": "Image URL must be a string",
+    "string.empty": "Image URL cannot be empty",
+    "string.uri": "Image URL must be a valid URI",
+  })
 });
 
 export const loginSchema = Joi.object({
@@ -89,7 +94,7 @@ export const changedUsernameSchema = Joi.object({
 });
 
 export const unfriendSchema = Joi.object({
-  email : Joi.string().email().required().messages({
+  email: Joi.string().email().required().messages({
     "string.base": "Email must be a string",
     "string.empty": "Email cannot be empty",
     "string.email": "Email must be a valid email",
