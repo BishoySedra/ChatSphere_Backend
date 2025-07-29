@@ -152,7 +152,6 @@ router.patch("/change-username/:email",
 
 router.patch("/change-image/:email",
     validate(userSchema.emailSchema, false),
-    validate(userSchema.changedImageSchema),
     userController.changeImageByEmail);
 
 export default router
