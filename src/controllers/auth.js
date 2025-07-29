@@ -6,8 +6,9 @@ export const register = async (req, res, next) => {
     // get the domain name and the protocol from the request
     const protocol = req.protocol;
     const domain = req.get("host");
+    const imageBuffer = req.file ? req.file.buffer : null;
 
-    const user = await userService.registerService(req.body, domain, protocol);
+    const user = await userService.registerService(req.body, imageBuffer, domain, protocol);
 
     return res.status(201).json({
       body: user,

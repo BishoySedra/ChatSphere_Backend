@@ -4,10 +4,11 @@ import * as jwt from "../helpers/jwt.js";
 import User from "../db/models/user.js";
 import sendEmail from "../helpers/emailSending.js";
 import dotenv from "dotenv";
+import { uploadFile } from "./message.js";
 
 dotenv.config();
 
-export const registerService = async (userData, domain, protocol) => {
+export const registerService = async (userData, imageBuffer, domain, protocol) => {
   const { username, email, password } = userData;
 
   // check if the user already exists using mongoose
@@ -19,11 +20,20 @@ export const registerService = async (userData, domain, protocol) => {
 
   const hashedPassword = await bcrypt.hashPassword(password);
 
+  // check if the imageBuffer is provided
+  let image_url = null;
+  if (imageBuffer) {
+    // upload the image to cloudinary and get the url
+    const result = await uploadFile(imageBuffer);
+    image_url = result.secure_url;
+  }
+
   // save the user to the database using mongoose
   const user = new User({
     username,
     email,
     password: hashedPassword,
+    image_url, // use the uploaded image url or null if no image is provided
     friends: [],
   });
 

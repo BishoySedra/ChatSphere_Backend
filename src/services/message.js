@@ -12,13 +12,18 @@ export const sendMessage = async (
   message,
   imageBuffer,
 ) => {
+
   let senderUser = await User.findOne({ email: senderEmail });
+
   if (!senderUser) throw createCustomError("User not found!", 404, null);
-  //find all chats that this user is in CHATS
+
+  // find all chats that this user is in CHATS
   let userChats = await Chat.find({ users: { $in: [senderEmail] } });
-  //check if the chat id is in the user chats if not then throw a 403
+
+  // check if the chat id is in the user chats if not then throw a 403
   let chat = await Chat.findOne({ _id: chatID });
   if (!chat) throw createCustomError("Chat not found!", 404, null);
+
   //how to check if a chat is inside user chats
   let flag = false;
   userChats.forEach((element) => {
@@ -44,7 +49,7 @@ export const sendMessage = async (
   let receiversEmails = chat.users.filter((user) => user != senderEmail);
   receiversEmails.forEach((receiverEmail) => {
     sockets.sendToOnlineReceivers(
-      {toBeSentMessage, chatID},
+      { toBeSentMessage, chatID },
       receiverEmail,
       "receivedMessage",
     );
@@ -53,7 +58,7 @@ export const sendMessage = async (
   return toBeSentMessage;
 };
 
-const uploadFile = (imageBuffer) => {
+export const uploadFile = (imageBuffer) => {
   return new Promise((resolve, reject) => {
     let stream = cloudinary.uploader.upload_stream((error, result) => {
       if (result) {

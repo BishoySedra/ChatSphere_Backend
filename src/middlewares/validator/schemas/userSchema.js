@@ -27,12 +27,7 @@ export const registerSchema = Joi.object({
       "string.pattern.base":
         "Password must have at least length of 8, have at least one lowercase letter, one uppercase letter, one number, and one special character",
       "any.required": "Password is required",
-    }),
-  image_url: Joi.string().uri().messages({
-    "string.base": "Image URL must be a string",
-    "string.empty": "Image URL cannot be empty",
-    "string.uri": "Image URL must be a valid URI",
-  })
+    })
 });
 
 export const loginSchema = Joi.object({

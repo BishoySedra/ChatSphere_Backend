@@ -3,9 +3,13 @@ import { authorize } from "../middlewares/validator/authorize.js";
 
 export const sendMessage = async (req, res, next) => {
   try {
+
     const { senderEmail, chatID } = req.params;
+
     const message = req.body.message;
+
     await authorize(req, res, next, senderEmail);
+
     const imageBuffer = req.file ? req.file.buffer : null;
     let sentMessage = await MessageService.sendMessage(
       senderEmail,
@@ -13,6 +17,7 @@ export const sendMessage = async (req, res, next) => {
       message,
       imageBuffer,
     );
+
     return res
       .status(200)
       .json({
