@@ -4,11 +4,12 @@ import Chat from "../db/models/chat.js";
 import GroupChat from "../db/models/group.chat.js";
 import User from "../db/models/user.js";
 import { authorizeOnGroup } from "../middlewares/validator/authorize.js";
+import * as ProfileService from "./profile.js";
 
 export const getUserPrivateChats = async (email) => {
 
   // check if email is valid
-  const user = await User.findOne({ email: email });
+  const user = await ProfileService.getUser(email);
 
   // If user is not found, throw a custom error
   if (!user) {
@@ -29,10 +30,24 @@ export const getUserPrivateChats = async (email) => {
   // For each chat, we can add additional details if needed
   for (let i = 0; i < chats.length; i++) {
 
-    // For each chat, we can add additional details if needed
-    chats[i].userDetails = await User.find({ email: { $in: chats[i].users } }).select("username image_url -_id");
+    let users = chats[i].users;
 
-    // console.log(`Chat ${i + 1}:`, chats[i].userDetails);
+    let pushedUser = {
+      senderUserName: user.username,
+      image_url: user.image_url,
+    }
+
+    chats[i].userDetails.push(pushedUser);
+
+    let otherEmail = users.filter((userEmail) => userEmail !== email)[0];
+    let otherUser = await ProfileService.getUser(otherEmail);
+
+    pushedUser = {
+      receiverUserName: otherUser.username,
+      image_url: otherUser.image_url,
+    }
+
+    chats[i].userDetails.push(pushedUser);
   }
 
   return chats;
