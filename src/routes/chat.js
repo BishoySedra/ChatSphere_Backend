@@ -202,9 +202,7 @@ import validate from "../middlewares/validator/validation.js";
 import * as schemas from "../middlewares/validator/schemas/userSchema.js";
 const router = Router();
 
-router.get("/private/:email",
-    validate(schemas.emailSchema, false),
-    chatController.getUserPrivateChats);
+router.get("/private/:email", validate(schemas.emailSchema, false), chatController.getUserPrivateChats);
 router.get("/groups/:email",
     validate(schemas.emailSchema, false),
     chatController.getUserGroupChats);

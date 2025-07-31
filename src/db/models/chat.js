@@ -17,8 +17,12 @@ const chatSchema = new Schema({
         type: String,
         enum: ["PRIVATE", "GROUP"],
     },
+    userDetails: {
+        type: [Object],
+        default: [],
+    },
 },
- { timestamps: true }
+    { timestamps: true }
 );
 const Chat = mongoose.model("Chat", chatSchema);
 

@@ -1,18 +1,42 @@
+import mongoose from "mongoose";
 import { createCustomError } from "../middlewares/errors/customError.js";
 import Chat from "../db/models/chat.js";
 import GroupChat from "../db/models/group.chat.js";
 import User from "../db/models/user.js";
 import { authorizeOnGroup } from "../middlewares/validator/authorize.js";
+
 export const getUserPrivateChats = async (email) => {
+
+  // check if email is valid
   const user = await User.findOne({ email: email });
-  if (!user) throw createCustomError("User not found!", 404, null);
+
+  // If user is not found, throw a custom error
+  if (!user) {
+    throw createCustomError("User not found!", 404, null);
+  }
+
+  // Find all chats where the user is a participant and the chat type is PRIVATE
   const chats = await Chat.find({
     users: { $in: [email] },
     chat_type: "PRIVATE",
   });
+
+  // If no chats are found, return an empty array
+  if (chats.length === 0) {
+    return [];
+  }
+
+  // For each chat, we can add additional details if needed
+  for (let i = 0; i < chats.length; i++) {
+
+    // For each chat, we can add additional details if needed
+    chats[i].userDetails = await User.find({ email: { $in: chats[i].users } }).select("username image_url -_id");
+
+    // console.log(`Chat ${i + 1}:`, chats[i].userDetails);
+  }
+
   return chats;
 };
-import mongoose from "mongoose";
 
 export const createGroupChat = async (
   adminEmail,
@@ -67,16 +91,16 @@ export const addUserToGroupChat = async (adminEmail, userEmail, chatID) => {
 };
 
 
-export const getUserGroupChats = async (email,token) => {
-    const user = await User.findOne({ email: email });
-    if (!user) 
-        throw createCustomError("User not found!", 404, null);
-    const chats = await Chat.find({users: { $in : [email] } ,chat_type: "GROUP"}).lean();
-    for(let i=0;i<chats.length;i++){
-        let groupChat = await getGroupChatDetails(chats[i]._id, token);
-        chats[i].groupChatDetails = groupChat;
-    }
-    return chats;
+export const getUserGroupChats = async (email, token) => {
+  const user = await User.findOne({ email: email });
+  if (!user)
+    throw createCustomError("User not found!", 404, null);
+  const chats = await Chat.find({ users: { $in: [email] }, chat_type: "GROUP" }).lean();
+  for (let i = 0; i < chats.length; i++) {
+    let groupChat = await getGroupChatDetails(chats[i]._id, token);
+    chats[i].groupChatDetails = groupChat;
+  }
+  return chats;
 }
 
 
