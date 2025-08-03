@@ -1,0 +1,5 @@
+FROM bishoysedra/chatsphere_api
+
+EXPOSE 3000
+
+CMD ["node", "index.js", "--environment", "dev"]
