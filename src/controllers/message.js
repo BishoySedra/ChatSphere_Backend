@@ -11,11 +11,18 @@ export const sendMessage = async (req, res, next) => {
     await authorize(req, res, next, senderEmail);
 
     const imageBuffer = req.file ? req.file.buffer : null;
+
+    // check if there is a reply and reply_to is provided
+    const is_reply = req.body.is_reply || false;
+    const reply_to = is_reply ? req.body.reply_to : null;
+
     let sentMessage = await MessageService.sendMessage(
       senderEmail,
       chatID,
       message,
       imageBuffer,
+      is_reply ? true : false,
+      reply_to ? reply_to : null
     );
 
     return res

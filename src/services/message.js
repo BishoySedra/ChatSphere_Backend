@@ -11,32 +11,71 @@ export const sendMessage = async (
   chatID,
   message,
   imageBuffer,
+  isReply = false,
+  replyTo = null,
 ) => {
 
+  // check if the sender exists in the database
   let senderUser = await User.findOne({ email: senderEmail });
 
-  if (!senderUser) throw createCustomError("User not found!", 404, null);
+  if (!senderUser) {
+    throw createCustomError("User not found!", 404, null);
+  }
 
   // find all chats that this user is in CHATS
   let userChats = await Chat.find({ users: { $in: [senderEmail] } });
 
   // check if the chat id is in the user chats if not then throw a 403
   let chat = await Chat.findOne({ _id: chatID });
-  if (!chat) throw createCustomError("Chat not found!", 404, null);
-
+  if (!chat) {
+    throw createCustomError("Chat not found!", 404, null);
+  }
   //how to check if a chat is inside user chats
   let flag = false;
   userChats.forEach((element) => {
-    if (element._id == chatID) flag = true;
+    if (element._id == chatID) {
+      flag = true;
+    }
   });
-  if (!flag) throw createCustomError("You are not in this chat!", 403, null);
-  //create new message and add it to the chat
+  if (!flag) {
+    throw createCustomError("You are not in this chat!", 403, null);
+  }
 
+  //create new message and add it to the chat
   let newMessage = new Message({ text: message, sender_email: senderEmail });
   if (imageBuffer) {
     let result = await uploadFile(imageBuffer);
     newMessage.imageUrl = result.secure_url;
   }
+
+  // check if is_reply is true and reply_to is provided
+  if (isReply && replyTo) {
+
+    // check if the reply_to (olf message id) exists in the chat messages
+    let oldMessage = chat.messages.find((msg) => msg._id == replyTo);
+
+    if (!oldMessage) {
+      throw createCustomError("Reply message not found!", 404, null);
+    }
+
+    newMessage.is_reply = true;
+    newMessage.reply_to = oldMessage._id;
+
+    newMessage.reply_to_text = {
+      text: oldMessage.text,
+      imageUrl: oldMessage.imageUrl,
+    };
+
+  } else {
+    newMessage.is_reply = false;
+    newMessage.reply_to = null;
+  }
+
+  // save the new message
+  await newMessage.save();
+
+  console.log("new message ", newMessage);
+
   //console.log("new message ", newMessage);
   let messageID = newMessage._id.toString();
   chat.messages.push(newMessage);
@@ -47,6 +86,7 @@ export const sendMessage = async (
   );
 
   let receiversEmails = chat.users.filter((user) => user != senderEmail);
+
   receiversEmails.forEach((receiverEmail) => {
     sockets.sendToOnlineReceivers(
       { toBeSentMessage, chatID },
@@ -111,3 +151,11 @@ export const deleteMessage = async (senderEmail, chatID, messageID) => {
   chat.messages = chat.messages.filter((message) => message._id != messageID);
   await chat.save();
 };
+
+const findMessageById = async (messageID) => {
+  let message = await Message.findById(messageID).select("-__v -createdAt -updatedAt");
+  if (!message) {
+    throw createCustomError("Message not found!", 404, null);
+  }
+  return message;
+}

@@ -53,7 +53,6 @@ export const emailSchema = Joi.object({
   }),
 });
 
-
 export const friendRequestSchema = Joi.object({
   sender: Joi.string().email().required().messages({
     "string.base": "Sender must be a string",
@@ -110,11 +109,11 @@ export const sendMessageURLSchema = Joi.object({
     "string.email": "Sender email must be a valid email",
     "any.required": "Sender email is required",
   }),
-  chatID: Joi.string().required().messages({
-    "string.base": "Chat ID must be a string",
+  chatID: Joi.required().messages({
+    "string.base": "Chat ID must be a valid MongoDB ObjectId",
     "string.empty": "Chat ID cannot be empty",
     "any.required": "Chat ID is required",
-  })
+  }),
 });
 
 export const deleteMessageURLSchema = Joi.object({
@@ -142,6 +141,24 @@ export const messageBodySchema = Joi.object({
     "string.empty": "Message cannot be empty",
     "any.required": "Message is required",
   }),
+  is_reply: Joi.boolean().optional().messages({
+    "boolean.base": "is_reply must be a boolean",
+    "any.required": "is_reply is optional",
+  }),
+  reply_to: Joi.string()
+    .when("is_reply", {
+      is: true,
+      then: Joi.required().messages({
+        "string.base": "reply_to must be a string",
+        "string.empty": "reply_to cannot be empty",
+        "any.required": "reply_to is required when is_reply is true",
+      }),
+      otherwise: Joi.optional().messages({
+        "string.base": "reply_to must be a string",
+        "string.empty": "reply_to cannot be empty",
+        "any.required": "reply_to is optional",
+      }),
+    }),
 });
 
 export const createGroupChatSchema = Joi.object({

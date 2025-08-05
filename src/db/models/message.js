@@ -23,9 +23,22 @@ const messageSchema = new Schema({
         type: String,
         required: true,
     },
+    is_reply: {
+        type: Boolean,
+        default: false,
+    },
+    reply_to: {
+        type: Schema.Types.ObjectId,
+        ref: "Message",
+        default: null,
+    },
+    reply_to_text: {
+        type: Object,
+        default: null,
+    },
 },
- { timestamps: true }
+    { timestamps: true }
 );
-    
+
 const Message = mongoose.model("Message", messageSchema);
 export { messageSchema, Message }
