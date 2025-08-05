@@ -1,8 +1,11 @@
-//make router for message
+// Import necessary modules and dependencies
 import { Router } from "express";
 import * as messageController from "../controllers/message.js";
 import validate from "../middlewares/validator/validation.js";
 import * as schemas from "../middlewares/validator/schemas/userSchema.js";
+
+// Initialize the router
+const router = Router();
 
 /**
  * @swagger
@@ -96,6 +99,14 @@ import * as schemas from "../middlewares/validator/schemas/userSchema.js";
  *         image: (binary file)
  */
 
+// Route to handle sending a message
+router.post(
+    "/:senderEmail/send/:chatID",
+    validate(schemas.sendMessageURLSchema, false), // Validate URL parameters
+    validate(schemas.messageBodySchema),          // Validate request body
+    messageController.sendMessage                 // Controller to handle the logic
+);
+
 /**
  * @swagger
  * /:senderEmail/delete/:chatID/:messageID:
@@ -133,16 +144,12 @@ import * as schemas from "../middlewares/validator/schemas/userSchema.js";
  *         message: "Message deleted successfully"
  */
 
-const router = Router();
+// Route to handle deleting a message
+router.delete(
+    "/:senderEmail/delete/:chatID/:messageID",
+    validate(schemas.deleteMessageURLSchema, false), // Validate URL parameters
+    messageController.deleteMessage                  // Controller to handle the logic
+);
 
-router.post("/:senderEmail/send/:chatID",
-    validate(schemas.sendMessageURLSchema, false),
-    validate(schemas.messageBodySchema),
-    messageController.sendMessage);
-
-router.delete("/:senderEmail/delete/:chatID/:messageID",
-    validate(schemas.deleteMessageURLSchema, false),
-    messageController.deleteMessage);
-
-
+// Export the router to be used in the application
 export default router;

@@ -1,3 +1,12 @@
+// Import necessary modules and dependencies
+import { Router } from "express";
+import * as authController from "../controllers/auth.js";
+import validate from "../middlewares/validator/validation.js";
+import * as userSchema from "../middlewares/validator/schemas/userSchema.js";
+
+// Initialize the router
+const router = Router();
+
 /**
  * @swagger
  * tags:
@@ -48,6 +57,13 @@
  *         description: Bad request
  */
 
+// Route to register a new user
+router.post(
+  "/register",
+  validate(userSchema.registerSchema), // Validate registration details
+  authController.register              // Controller to handle the logic
+);
+
 /**
  * @swagger
  * /auth/login:
@@ -88,6 +104,13 @@
  *         description: Unauthorized
  */
 
+// Route to log in a user
+router.post(
+  "/login",
+  validate(userSchema.loginSchema), // Validate login details
+  authController.login              // Controller to handle the logic
+);
+
 /**
  * @swagger
  * /auth/verify/{email}:
@@ -114,25 +137,12 @@
  *         description: Bad request
  */
 
-import { Router } from "express";
-import * as authController from "../controllers/auth.js";
-import validate from "../middlewares/validator/validation.js";
-import * as userSchema from "../middlewares/validator/schemas/userSchema.js";
-
-const router = Router();
-
-router.post(
-  "/register",
-  validate(userSchema.registerSchema),
-  authController.register
-);
-
-router.post("/login", validate(userSchema.loginSchema), authController.login);
-
+// Route to verify a user's email
 router.get(
   "/verify/:email",
-  validate(userSchema.emailSchema, false),
-  authController.verifyEmail
+  validate(userSchema.emailSchema, false), // Validate email format
+  authController.verifyEmail              // Controller to handle the logic
 );
 
+// Export the router to be used in the application
 export default router;

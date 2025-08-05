@@ -1,3 +1,12 @@
+// Import necessary modules and dependencies
+import { Router } from "express";
+import * as chatController from "../controllers/chat.js";
+import validate from "../middlewares/validator/validation.js";
+import * as schemas from "../middlewares/validator/schemas/userSchema.js";
+
+// Initialize the router
+const router = Router();
+
 /**
  * @swagger
  * tags:
@@ -31,6 +40,13 @@
  *         description: User not found
  */
 
+// Route to retrieve private chats of a user
+router.get(
+    "/private/:email",
+    validate(schemas.emailSchema, false), // Validate email format
+    chatController.getUserPrivateChats    // Controller to handle the logic
+);
+
 /**
  * @swagger
  * /groups/{email}:
@@ -57,6 +73,13 @@
  *         description: User not found
  */
 
+// Route to retrieve group chats of a user
+router.get(
+    "/groups/:email",
+    validate(schemas.emailSchema, false), // Validate email format
+    chatController.getUserGroupChats      // Controller to handle the logic
+);
+
 /**
  * @swagger
  * /groups/details/{chatID}:
@@ -82,6 +105,13 @@
  *       404:
  *         description: Group chat not found
  */
+
+// Route to retrieve details of a group chat
+router.get(
+    "/groups/details/:chatID",
+    validate(schemas.chatIDSchema, false), // Validate chat ID format
+    chatController.getGroupChatDetails     // Controller to handle the logic
+);
 
 /**
  * @swagger
@@ -118,6 +148,13 @@
  *       404:
  *         description: Admin user not found
  */
+
+// Route to create a new group chat
+router.post(
+    "/groups/create",
+    validate(schemas.createGroupChatSchema), // Validate group creation details
+    chatController.createGroupChat           // Controller to handle the logic
+);
 
 /**
  * @swagger
@@ -156,6 +193,13 @@
  *       400:
  *         description: User is not a friend of the admin
  */
+
+// Route to add a user to a group chat
+router.post(
+    "/groups/add-friend",
+    validate(schemas.addUserToGroupChatSchema), // Validate user addition details
+    chatController.addUserToGroupChat          // Controller to handle the logic
+);
 
 /**
  * @swagger
@@ -196,34 +240,13 @@
  *         description: User is not the admin of the group chat
  */
 
-import { Router } from "express";
-import * as chatController from "../controllers/chat.js";
-import validate from "../middlewares/validator/validation.js";
-import * as schemas from "../middlewares/validator/schemas/userSchema.js";
-const router = Router();
+// Route to delete a group chat
+router.delete(
+    "/groups/:chatID",
+    validate(schemas.chatIDSchema, false), // Validate chat ID format
+    validate(schemas.emailSchema),        // Validate admin email
+    chatController.deleteGroupChat        // Controller to handle the logic
+);
 
-router.get("/private/:email", validate(schemas.emailSchema, false), chatController.getUserPrivateChats);
-router.get("/groups/:email",
-    validate(schemas.emailSchema, false),
-    chatController.getUserGroupChats);
-router.get("/groups/details/:chatID",
-    validate(schemas.chatIDSchema, false),
-    chatController.getGroupChatDetails
-)
-
-router.post("/groups/create",
-    validate(schemas.createGroupChatSchema),
-    chatController.createGroupChat);
-
-router.post("/groups/add-friend",
-    validate(schemas.addUserToGroupChatSchema),
-    chatController.addUserToGroupChat
-)
-
-router.delete("/groups/:chatID",
-    validate(schemas.chatIDSchema, false),
-    validate(schemas.emailSchema),
-    chatController.deleteGroupChat
-)
-
+// Export the router to be used in the application
 export default router;

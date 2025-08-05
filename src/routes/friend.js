@@ -1,3 +1,4 @@
+// Import necessary modules and dependencies
 import { Router } from "express";
 import * as FriendController from "../controllers/friend.js";
 import validate from "../middlewares/validator/validation.js";
@@ -10,6 +11,9 @@ import * as userSchemas from "../middlewares/validator/schemas/userSchema.js";
  *   name: Friends
  *   description: API for managing friends and friend requests
  */
+
+// Initialize the router
+const router = Router();
 
 /**
  * @swagger
@@ -37,11 +41,14 @@ import * as userSchemas from "../middlewares/validator/schemas/userSchema.js";
  *         description: Validation error or friend request already exists
  *       404:
  *         description: User not found
- *     examples:
- *       application/json:
- *         sender: "john.doe@example.com"
- *         receiver: "jane.doe@example.com"
  */
+
+// Route to send a friend request
+router.post(
+  "/:sender/send/:receiver",
+  validate(userSchemas.friendRequestSchema, false), // Validate sender and receiver emails
+  FriendController.sendFriendRequest                // Controller to handle the logic
+);
 
 /**
  * @swagger
@@ -74,12 +81,15 @@ import * as userSchemas from "../middlewares/validator/schemas/userSchema.js";
  *         description: Friend request accepted or rejected
  *       404:
  *         description: Friend request not found
- *     examples:
- *       application/json:
- *         receiver: "jane.doe@example.com"
- *         sender: "john.doe@example.com"
- *         status: "ACCEPTED"
  */
+
+// Route to respond to a friend request
+router.post(
+  "/:receiver/response/:sender",
+  validate(userSchemas.friendRequestSchema, false),       // Validate receiver and sender emails
+  validate(userSchemas.friendRequestResponseSchema),      // Validate response status
+  FriendController.respondToFriendRequest                // Controller to handle the logic
+);
 
 /**
  * @swagger
@@ -99,10 +109,14 @@ import * as userSchemas from "../middlewares/validator/schemas/userSchema.js";
  *         description: List of friends
  *       404:
  *         description: User not found
- *     examples:
- *       application/json:
- *         email: "john.doe@example.com"
  */
+
+// Route to get all friends of a user
+router.get(
+  "/:email/friends",
+  validate(userSchemas.emailSchema, false), // Validate user email
+  FriendController.getAllFriends           // Controller to handle the logic
+);
 
 /**
  * @swagger
@@ -122,10 +136,14 @@ import * as userSchemas from "../middlewares/validator/schemas/userSchema.js";
  *         description: List of friend requests
  *       404:
  *         description: User not found
- *     examples:
- *       application/json:
- *         email: "jane.doe@example.com"
  */
+
+// Route to get all friend requests for a user
+router.get(
+  "/:email/friend-requests",
+  validate(userSchemas.emailSchema, false), // Validate user email
+  FriendController.getAllFriendRequests    // Controller to handle the logic
+);
 
 /**
  * @swagger
@@ -151,11 +169,14 @@ import * as userSchemas from "../middlewares/validator/schemas/userSchema.js";
  *         description: Successfully unfriended
  *       404:
  *         description: User or friend not found
- *     examples:
- *       application/json:
- *         email: "john.doe@example.com"
- *         friendEmail: "jane.doe@example.com"
  */
+
+// Route to unfriend a user
+router.patch(
+  "/:email/unfriend/:friendEmail",
+  validate(userSchemas.unfriendSchema, false), // Validate user and friend emails
+  FriendController.unfriend                   // Controller to handle the logic
+);
 
 /**
  * @swagger
@@ -181,56 +202,14 @@ import * as userSchemas from "../middlewares/validator/schemas/userSchema.js";
  *         description: Friend request cancelled successfully
  *       404:
  *         description: Friend request not found
- *     examples:
- *       application/json:
- *         sender: "john.doe@example.com"
- *         receiver: "jane.doe@example.com"
  */
 
-const router = Router();
-
-// search friend by email
-// router.get(
-//   "/search/:email",
-//   validate(userSchemas.emailSchema, false),
-//   FriendController.searchFriendByEmail
-// );
-
-// send friend request
-router.post(
-  "/:sender/send/:receiver",
-  validate(userSchemas.friendRequestSchema, false),
-  FriendController.sendFriendRequest
+// Route to cancel a sent friend request
+router.patch(
+  "/:sender/cancel-friend-request/:receiver",
+  validate(userSchemas.friendRequestSchema, false), // Validate sender and receiver emails
+  FriendController.cancelFriendRequest             // Controller to handle the logic
 );
 
-// accept friend request
-router.post(
-  "/:receiver/response/:sender",
-  validate(userSchemas.friendRequestSchema, false),
-  validate(userSchemas.friendRequestResponseSchema),
-  FriendController.respondToFriendRequest
-);
-
-router.get(
-  "/:email/friends",
-  validate(userSchemas.emailSchema, false),
-  FriendController.getAllFriends
-);
-
-router.get(
-  "/:email/friend-requests",
-  validate(userSchemas.emailSchema, false),
-  FriendController.getAllFriendRequests
-);
-
-router.patch("/:email/unfriend/:friendEmail",
-  validate(userSchemas.unfriendSchema, false),
-  FriendController.unfriend
-);
-
-router.patch('/:sender/cancel-friend-request/:receiver',
-  validate(userSchemas.friendRequestSchema, false),
-  FriendController.cancelFriendRequest
-)
-
+// Export the router to be used in the application
 export default router;

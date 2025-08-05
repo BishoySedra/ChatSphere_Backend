@@ -1,3 +1,4 @@
+// Import necessary modules and dependencies
 import { Router } from "express";
 import * as userController from "../controllers/profile.js";
 import validate from "../middlewares/validator/validation.js";
@@ -38,6 +39,16 @@ import * as userSchema from "../middlewares/validator/schemas/userSchema.js";
  *         description: User not found
  */
 
+// Initialize the router
+const router = Router();
+
+// Route to get user details by email
+router.get(
+    "/:email",
+    validate(userSchema.emailSchema, false), // Validate email format
+    userController.getUser                  // Controller to handle the logic
+);
+
 /**
  * @swagger
  * /profile/username/{email}:
@@ -63,6 +74,13 @@ import * as userSchema from "../middlewares/validator/schemas/userSchema.js";
  *       404:
  *         description: User not found
  */
+
+// Route to get username by email
+router.get(
+    "/username/:email",
+    validate(userSchema.emailSchema, false), // Validate email format
+    userController.getUsernameByEmail       // Controller to handle the logic
+);
 
 /**
  * @swagger
@@ -100,6 +118,14 @@ import * as userSchema from "../middlewares/validator/schemas/userSchema.js";
  *         description: User not found
  */
 
+// Route to change username by email
+router.patch(
+    "/change-username/:email",
+    validate(userSchema.emailSchema, false),       // Validate email format
+    validate(userSchema.changedUsernameSchema),   // Validate new username
+    userController.changeUsernameByEmail          // Controller to handle the logic
+);
+
 /**
  * @swagger
  * /profile/change-image/{email}:
@@ -136,22 +162,12 @@ import * as userSchema from "../middlewares/validator/schemas/userSchema.js";
  *         description: User not found
  */
 
-const router = Router();
+// Route to change profile image by email
+router.patch(
+    "/change-image/:email",
+    validate(userSchema.emailSchema, false), // Validate email format
+    userController.changeImageByEmail       // Controller to handle the logic
+);
 
-router.get("/:email",
-    validate(userSchema.emailSchema, false),
-    userController.getUser);
-router.get("/username/:email",
-    validate(userSchema.emailSchema, false),
-    userController.getUsernameByEmail);
-
-router.patch("/change-username/:email",
-    validate(userSchema.emailSchema, false),
-    validate(userSchema.changedUsernameSchema),
-    userController.changeUsernameByEmail);
-
-router.patch("/change-image/:email",
-    validate(userSchema.emailSchema, false),
-    userController.changeImageByEmail);
-
-export default router
+// Export the router to be used in the application
+export default router;
