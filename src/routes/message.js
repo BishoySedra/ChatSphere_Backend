@@ -44,10 +44,10 @@ import * as schemas from "../middlewares/validator/schemas/userSchema.js";
  *                 type: string
  *                 format: binary
  *                 description: Optional image file to send with the message
- *               isReply:
+ *               is_reply:
  *                 type: boolean
  *                 description: Whether the message is a reply
- *               replyTo:
+ *               reply_to:
  *                 type: string
  *                 description: ID of the message being replied to (if any)
  *     responses:
