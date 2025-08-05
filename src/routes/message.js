@@ -44,6 +44,12 @@ import * as schemas from "../middlewares/validator/schemas/userSchema.js";
  *                 type: string
  *                 format: binary
  *                 description: Optional image file to send with the message
+ *               isReply:
+ *                 type: boolean
+ *                 description: Whether the message is a reply
+ *               replyTo:
+ *                 type: string
+ *                 description: ID of the message being replied to (if any)
  *     responses:
  *       200:
  *         description: Message sent successfully
@@ -64,6 +70,22 @@ import * as schemas from "../middlewares/validator/schemas/userSchema.js";
  *                 imageUrl:
  *                   type: string
  *                   description: URL of the uploaded image (if any)
+ *                 is_reply:
+ *                   type: boolean
+ *                   description: Whether the message is a reply
+ *                 reply_to:
+ *                   type: string
+ *                   description: ID of the message being replied to (if any)
+ *                 reply_to_text:
+ *                   type: object
+ *                   description: Text and image URL of the replied-to message
+ *                   properties:
+ *                     text:
+ *                       type: string
+ *                       description: Text of the replied-to message
+ *                     imageUrl:
+ *                       type: string
+ *                       description: Image URL of the replied-to message (if any)
  *       403:
  *         description: User is not part of the chat
  *       404:
