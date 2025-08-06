@@ -116,7 +116,7 @@ export const initializeServer = async (port, server) => {
         console.log(`→ http://localhost:${port}${process.env.BASE_URL}`);
         console.log(`→ Swagger Docs: http://localhost:${port}/docs`);
     } else {
-        console.log("Server is running in production/local mode.");
+        console.log("Server is running in production mode.");
         console.log(`→ ${DEPLOYMENT_API_URL}${process.env.BASE_URL}`);
         console.log(`→ Swagger Docs: ${DEPLOYMENT_API_URL}/docs`);
     }
