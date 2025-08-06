@@ -5,27 +5,20 @@ dotenv.config();
 
 async function connectDB(envVariable) {
   try {
-    let connection
-    if(envVariable === "dev")
-      connection = await mongoose.connect(
-        process.env.MONGODB_CONNECTION_URL_DEV
-      );
-    else if(envVariable === "test"){
-      connection = await mongoose.connect(
-        process.env.MONGODB_CONNECTION_URL_TEST
-      );
 
-      //await clearAllCollections(mongoose.connection)
+    let connection = null;
 
+    if (envVariable === "dev") {
+      connection = await mongoose.connect(process.env.MONGODB_CONNECTION_URL_DEV);
+      console.log("Connected to MongoDB in development mode!");
+    } else if (envVariable === "test") {
+      connection = await mongoose.connect(process.env.MONGODB_CONNECTION_URL_TEST);
+      console.log("Connected to MongoDB in test mode!");
+    } else {
+      connection = await mongoose.connect(process.env.MONGODB_CONNECTION_URL_PROD);
+      console.log("Connected to MongoDB in production mode!");
     }
-    else{
-      if(!process.env.MONGODB_CONNECTION_URL_LOCAL) 
-        throw new Error("No local MongoDB available!")
-      connection = await mongoose.connect(
-        process.env.MONGODB_CONNECTION_URL_LOCAL
-      );
-    }
-    console.log(`Database for ${envVariable} enviroment Connected successfully!`);
+
   } catch (error) {
     console.log(error);
   }
@@ -34,9 +27,9 @@ async function connectDB(envVariable) {
 export default connectDB;
 
 
-async function clearAllCollections(connection){
+async function clearAllCollections(connection) {
   let collections = await connection.listCollections()
-  for(let collection of collections){
+  for (let collection of collections) {
     await connection.dropCollection(collection.name)
   }
   console.log("All collections cleared!")

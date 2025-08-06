@@ -2,17 +2,22 @@ import { Command } from "commander";
 
 
 export const configureEnvironmentVariable = () => {
-    // Create a new Commander program
+  // Create a new Commander program
   const program = new Command();
 
   // Define the required option for the environment variable
-  program
-    .requiredOption('--environment <(dev|test|local)>', 'Environment variable', /^(dev|test|local)$/);
+  program.requiredOption('--environment <(dev|test|prod)>', 'Environment variable', /^(dev|test|prod)$/);
 
   program.parse(process.argv);
+
   const { environment } = program.opts();
-  if(environment !== "dev" && environment !== "test" && environment !== "local"){
-    throw new Error("Invalid Environment Variable .. Cannot start DB!");
+
+  const envs = ["dev", "test", "prod"];
+
+  // Validate the environment variable
+  if (!envs.includes(environment)) {
+    console.error(`Invalid environment variable: ${environment}. Must be one of: ${envs.join(", ")}`);
+    process.exit(1);
   }
 
   return environment
