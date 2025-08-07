@@ -1,0 +1,13 @@
+name: Keep Render API Warm
+
+on:
+  schedule:
+    - cron: "*/2 * * * *" # Every 2 minutes (UTC)
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Make GET request to Render API docs
+        run: curl -s -o /dev/null -w "%{http_code}\n" https://chatsphere-api.onrender.com/docs/
