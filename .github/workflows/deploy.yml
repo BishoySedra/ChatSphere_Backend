@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'Dockerfile.build'
-      - 'src/**'
-      - '.github/workflows/deploy.yml'
 
 jobs:
   deploy:
