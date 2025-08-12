@@ -224,3 +224,21 @@ export const markMessageAsSeenURLSchema = Joi.object({
     "any.required": "Message ID is required",
   }),
 });
+
+export const typingStatusSchema = Joi.object({
+  chatID: Joi.string().required().messages({
+    "string.base": "Chat ID must be a string",
+    "string.empty": "Chat ID cannot be empty",
+    "any.required": "Chat ID is required",
+  }),
+  email: Joi.string().email().required().messages({
+    "string.base": "Email must be a string",
+    "string.empty": "Email cannot be empty",
+    "string.email": "Email must be a valid email",
+    "any.required": "Email is required",
+  }),
+  isTyping: Joi.boolean().required().messages({
+    "boolean.base": "isTyping must be a boolean",
+    "any.required": "isTyping is required",
+  }),
+});

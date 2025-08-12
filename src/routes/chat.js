@@ -248,5 +248,12 @@ router.delete(
     chatController.deleteGroupChat        // Controller to handle the logic
 );
 
+// Route to update typing status
+router.patch(
+    "/typing-status",
+    validate(schemas.typingStatusSchema), // Validate typing status details
+    chatController.updateTypingStatus     // Controller to handle the logic
+);
+
 // Export the router to be used in the application
 export default router;

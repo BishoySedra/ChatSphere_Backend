@@ -29,6 +29,7 @@ export const getUserGroupChats = async (req, res, next) => {
   }
 }
 
+// get group chat details by chatID
 export const getGroupChatDetails = async (req, res, next) => {
   try {
     const { chatID } = req.params;
@@ -40,6 +41,7 @@ export const getGroupChatDetails = async (req, res, next) => {
   }
 }
 
+// create a group chat with admin email, group name and group description
 export const createGroupChat = async (req, res, next) => {
   try {
     const { adminEmail, groupName, groupDescription } = req.body;
@@ -54,6 +56,7 @@ export const createGroupChat = async (req, res, next) => {
   }
 }
 
+// add a user to a group chat with admin email, user email and chatID
 export const addUserToGroupChat = async (req, res, next) => {
   try {
     const { adminEmail, userEmail, chatID } = req.body;
@@ -65,6 +68,7 @@ export const addUserToGroupChat = async (req, res, next) => {
   }
 }
 
+// delete a group chat by chatID
 export const deleteGroupChat = async (req, res, next) => {
   try {
     const { chatID } = req.params;
@@ -72,6 +76,17 @@ export const deleteGroupChat = async (req, res, next) => {
     await authorize(req, res, next, email)
     await chatService.deleteGroupChat(email, chatID)
     return res.send({ body: null, message: "Group chat deleted succesfully!", status: 200 });
+  } catch (err) {
+    next(err)
+  }
+}
+
+// update typing status of a user in a chat
+export const updateTypingStatus = async (req, res, next) => {
+  try {
+    const { chatID, email, isTyping } = req.body;
+    await chatService.updateTypingStatus(chatID, email, isTyping);
+    return res.send({ body: null, message: "Typing status updated successfully!", status: 200 });
   } catch (err) {
     next(err)
   }
