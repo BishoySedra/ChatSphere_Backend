@@ -152,10 +152,36 @@ export const deleteMessage = async (senderEmail, chatID, messageID) => {
   await chat.save();
 };
 
-const findMessageById = async (messageID) => {
-  let message = await Message.findById(messageID).select("-__v -createdAt -updatedAt");
+export const markMessageAsSeen = async (email, chatID, messageID) => {
+
+  // Find the chat
+  const chat = await Chat.findOne({ _id: chatID });
+
+  if (!chat) {
+    throw createCustomError("Chat not found!", 404, null);
+  }
+
+  // Find the message in the chat
+  const message = chat.messages.find((msg) => msg._id.toString() === messageID);
+
   if (!message) {
     throw createCustomError("Message not found!", 404, null);
   }
+
+  // Mark the message as seen
+  if (!message.seenBy.includes(email)) {
+    message.seenBy.push(email);
+  }
+
+  // Save the updated chat
+  await chat.save();
+
+  // Emit the "messageSeen" event to notify other users
+  sockets.sendToOnlineReceivers(
+    { chatID, messageID },
+    email,
+    "messageSeen"
+  );
+
   return message;
-}
+};

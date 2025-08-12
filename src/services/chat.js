@@ -105,7 +105,6 @@ export const addUserToGroupChat = async (adminEmail, userEmail, chatID) => {
   await chat.save();
 };
 
-
 export const getUserGroupChats = async (email, token) => {
   const user = await User.findOne({ email: email });
   if (!user)
@@ -117,7 +116,6 @@ export const getUserGroupChats = async (email, token) => {
   }
   return chats;
 }
-
 
 export const getGroupChatDetails = async (id, token) => {
   // check if chat_id is valid mongoose
@@ -152,4 +150,24 @@ export const deleteGroupChat = async (adminEmail, chatID) => {
     );
   await chat.deleteOne();
   await groupChat.deleteOne();
+};
+
+export const updateTypingStatus = async (email, chatID, isTyping) => {
+  // Validate the chat
+  const chat = await Chat.findOne({ _id: chatID });
+  if (!chat) {
+    throw createCustomError("Chat not found!", 404, null);
+  }
+
+  // Emit the "typingStatus" event to notify other users
+  const receiversEmails = chat.users.filter((user) => user !== email);
+  receiversEmails.forEach((receiverEmail) => {
+    sockets.sendToOnlineReceivers(
+      { chatID, email, isTyping },
+      receiverEmail,
+      "typingStatus"
+    );
+  });
+
+  return { chatID, email, isTyping };
 };

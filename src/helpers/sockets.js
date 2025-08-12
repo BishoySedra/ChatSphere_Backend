@@ -4,6 +4,7 @@ dotenv.config();
 export let loggedInUsers = []//{email: [array of socket ids]}
 let io
 
+console.log(loggedInUsers);
 
 const addLoggedInUser = (email, socketId) => {
   const user = loggedInUsers.find(user => user.email === email)
@@ -43,10 +44,15 @@ export const socketConnection = (server) => {
 
     socket.on("successfulLogin", ({ email }) => {
       addLoggedInUser(email, socket.id);
+      console.log(loggedInUsers);
+
     });
-    socket.on("succesfulLogout", ({ email }) => {
+
+    socket.on("successfulLogout", ({ email }) => {
       removeLoggedInUser(email, socket.id);
+      console.log(loggedInUsers);
     });
+
     socket.on("disconnect", () => {
       loggedInUsers = loggedInUsers
         .map((user) => {
@@ -55,5 +61,28 @@ export const socketConnection = (server) => {
         })
         .filter((user) => user.socketId.length > 0);
     });
+
+    // // Handle message seen event
+    // socket.on("messageSeen", ({ chatID, messageID, email }) => {
+    //   // Notify other users in the chat that the message has been seen
+    //   const user = loggedInUsers.find(user => user.email === email);
+    //   if (user) {
+    //     user.socketId.forEach((receiverSocket) => {
+    //       io.to(receiverSocket).emit("messageSeen", { chatID, messageID });
+    //     });
+    //   }
+    // });
+
+    // // Handle typing status event
+    // socket.on("typingStatus", ({ chatID, email, isTyping }) => {
+    //   // Broadcast typing status to other users in the chat
+    //   const user = loggedInUsers.find(user => user.email === email);
+    //   if (user) {
+    //     user.socketId.forEach((receiverSocket) => {
+    //       io.to(receiverSocket).emit("typingStatus", { chatID, email, isTyping });
+    //     });
+    //   }
+    // });
+
   });
 };

@@ -151,5 +151,62 @@ router.delete(
     messageController.deleteMessage                  // Controller to handle the logic
 );
 
+/**
+ * @swagger
+ * /mark-as-seen/{email}/{chatID}/{messageID}:
+ *   patch:
+ *     summary: Mark a message as seen in a chat
+ *     tags: [Messages]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Email of the user marking the message as seen
+ *       - in: path
+ *         name: chatID
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the chat containing the message
+ *       - in: path
+ *         name: messageID
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the message to mark as seen
+ *     responses:
+ *       200:
+ *         description: Message marked as seen successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 chatID:
+ *                   type: string
+ *                   description: ID of the chat
+ *                 messageID:
+ *                   type: string
+ *                   description: ID of the message marked as seen
+ *                 seenBy:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: List of users who have seen the message
+ *       404:
+ *         description: Chat or message not found
+ *       400:
+ *         description: Invalid input
+ */
+
+// Route to handle marking a message as seen
+router.patch(
+    "/mark-as-seen/:email/:chatID/:messageID",
+    validate(schemas.markMessageAsSeenURLSchema, false), // Validate URL parameters
+    messageController.markMessageAsSeen                 // Controller to handle the logic
+);
+
 // Export the router to be used in the application
 export default router;

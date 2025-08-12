@@ -53,3 +53,20 @@ export const deleteMessage = async (req, res, next) => {
     next(error);
   }
 };
+
+export const markMessageAsSeen = async (req, res, next) => {
+  try {
+    const { email, chatID, messageID } = req.params;
+    await authorize(req, res, next, email);
+    await MessageService.markMessageAsSeen(email, chatID, messageID);
+    return res
+      .status(200)
+      .json({
+        body: null,
+        message: "Message marked as seen successfully",
+        status: 200,
+      });
+  } catch (error) {
+    next(error);
+  }
+};

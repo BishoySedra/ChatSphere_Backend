@@ -36,6 +36,10 @@ const messageSchema = new Schema({
         type: Object,
         default: null,
     },
+    seenBy: {
+        type: [String],
+        default: [],
+    },
 },
     { timestamps: true }
 );
