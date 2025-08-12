@@ -248,6 +248,55 @@ router.delete(
     chatController.deleteGroupChat        // Controller to handle the logic
 );
 
+/**
+ * @swagger
+ * /typing-status:
+ *   patch:
+ *     summary: Update typing status in a chat
+ *     tags: [Chat]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Email of the user updating typing status
+ *               chatID:
+ *                 type: string
+ *                 description: ID of the chat
+ *               isTyping:
+ *                 type: boolean
+ *                 description: Typing status (true if typing, false otherwise)
+ *           example:
+ *             email: "user@example.com"
+ *             chatID: "chatId123"
+ *             isTyping: true
+ *     responses:
+ *       200:
+ *         description: Typing status updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 chatID:
+ *                   type: string
+ *                   description: ID of the chat
+ *                 email:
+ *                   type: string
+ *                   description: Email of the user
+ *                 isTyping:
+ *                   type: boolean
+ *                   description: Typing status
+ *       404:
+ *         description: Chat not found
+ *       400:
+ *         description: Invalid input
+ */
+
 // Route to update typing status
 router.patch(
     "/typing-status",
