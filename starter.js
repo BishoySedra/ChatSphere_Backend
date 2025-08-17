@@ -32,7 +32,7 @@ const app = new Express();
 const DEPLOYMENT_API_URL = process.env.DEPLOYMENT_API_URL;
 const CLIENT_URL = process.env.CLIENT_URL;
 
-const allowedOrigins = [CLIENT_URL, DEPLOYMENT_API_URL, "http://localhost:3000"];
+const allowedOrigins = [CLIENT_URL, DEPLOYMENT_API_URL, "http://localhost:3000", `http://localhost:${process.env.PORT || 3000}`];
 
 const corsOptions = {
     origin: (origin, callback) => {

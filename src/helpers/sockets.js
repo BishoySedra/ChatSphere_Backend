@@ -37,7 +37,7 @@ export const sendToOnlineReceivers = (data, currentlyOnlineEmail, eventName) => 
 export const socketConnection = (server) => {
   io = new Server(server, {
     cors: {
-      origin: [process.env.CLIENT_URL, "http://localhost:3000"]
+      origin: [process.env.CLIENT_URL, "http://localhost:3000", `http://localhost:${process.env.PORT || 3000}`],
     },
   });
   io.on("connection", (socket) => {
