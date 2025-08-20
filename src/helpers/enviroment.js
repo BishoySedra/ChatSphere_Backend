@@ -1,7 +1,15 @@
 import { Command } from "commander";
 
-
+/**
+ * Configure and validate environment variable
+ * @returns {string} The validated environment variable (dev|test|prod)
+ */
 export const configureEnvironmentVariable = () => {
+  // If running in Jest test environment, default to 'test'
+  if (process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID) {
+    return 'test';
+  }
+
   // Create a new Commander program
   const program = new Command();
 
@@ -20,5 +28,5 @@ export const configureEnvironmentVariable = () => {
     process.exit(1);
   }
 
-  return environment
-}
+  return environment;
+};

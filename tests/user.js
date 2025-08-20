@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../index.js";
+import app from "../starter.js";
 
 const registerURL = `${process.env.BASE_URL}/auth/register`;
 const loginURL = `${process.env.BASE_URL}/auth/login`;
