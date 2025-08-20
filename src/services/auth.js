@@ -8,10 +8,22 @@ import { uploadFile } from "./message.js";
 
 dotenv.config();
 
+/**
+ * Register a new user
+ * @param {Object} userData - User registration data
+ * @param {string} userData.username - User's username
+ * @param {string} userData.email - User's email
+ * @param {string} userData.password - User's password
+ * @param {Buffer} imageBuffer - Optional profile image buffer
+ * @param {string} domain - Domain for verification link
+ * @param {string} protocol - Protocol for verification link (http/https)
+ * @throws {CustomError} - If user already exists
+ * @returns {Promise<{username: string, email: string}>} - User details
+ */
 export const registerService = async (userData, imageBuffer, domain, protocol) => {
   const { username, email, password } = userData;
 
-  // check if the user already exists using mongoose
+  // Check if the user already exists
   const existedUser = await User.findOne({ email });
 
   if (existedUser) {
@@ -20,26 +32,25 @@ export const registerService = async (userData, imageBuffer, domain, protocol) =
 
   const hashedPassword = await bcrypt.hashPassword(password);
 
-  // check if the imageBuffer is provided
+  // Upload profile image if provided
   let image_url = null;
   if (imageBuffer) {
-    // upload the image to cloudinary and get the url
     const result = await uploadFile(imageBuffer);
     image_url = result.secure_url;
   }
 
-  // save the user to the database using mongoose
+  // Create and save new user
   const user = new User({
     username,
     email,
     password: hashedPassword,
-    image_url, // use the uploaded image url or null if no image is provided
+    image_url,
     friends: [],
   });
 
   await user.save();
 
-  // send email to the user
+  // Send verification email
   const verificationLink = `${protocol}://${domain}${process.env.BASE_URL}/auth/verify/${email}`;
   const subject = "Account Verification";
   const text = `Click the button below to verify your account:`;
@@ -56,21 +67,30 @@ export const registerService = async (userData, imageBuffer, domain, protocol) =
   return { username, email };
 };
 
+/**
+ * Authenticate user login
+ * @param {Object} userData - User login data
+ * @param {string} userData.email - User's email
+ * @param {string} userData.password - User's password
+ * @throws {CustomError} - If user not found, not verified, or invalid password
+ * @returns {Promise<string>} - JWT token
+ */
 export const loginService = async (userData) => {
-  const { email, password, isVerified } = userData;
+  const { email, password } = userData;
 
-  // check if the user already exists using mongoose
+  // Check if user exists
   const existedUser = await User.findOne({ email });
 
   if (!existedUser) {
     throw new createCustomError("Invalid Email!", 401, null);
   }
 
-  // check if the account is verified
+  // Check if account is verified
   if (!existedUser.isVerified) {
     throw new createCustomError("Account is not verified!", 401, null);
   }
 
+  // Verify password
   const isCorrectPassword = await bcrypt.comparePassword(
     password,
     existedUser.password
@@ -80,7 +100,8 @@ export const loginService = async (userData) => {
     throw new createCustomError("Invalid Password!", 401, null);
   }
 
-  let token = jwt.generateToken([
+  // Generate JWT token
+  const token = jwt.generateToken([
     {
       email: existedUser.email,
     },
@@ -92,15 +113,21 @@ export const loginService = async (userData) => {
   return token;
 };
 
+/**
+ * Verify user email
+ * @param {string} email - User's email to verify
+ * @throws {CustomError} - If email not found
+ * @returns {Promise<void>}
+ */
 export const verifyEmailService = async (email) => {
-  // check if the user already exists using mongoose
+  // Check if user exists
   const existedUser = await User.findOne({ email });
 
   if (!existedUser) {
     throw new createCustomError("Email Not Found!", 404, null);
   }
 
+  // Mark user as verified
   existedUser.isVerified = true;
-
   await existedUser.save();
 };

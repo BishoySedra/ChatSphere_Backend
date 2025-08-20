@@ -1,9 +1,14 @@
 import * as userService from "../services/auth.js";
 
-// user will give username, email, password
+/**
+ * Register a new user
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const register = async (req, res, next) => {
   try {
-    // get the domain name and the protocol from the request
+    // Get domain and protocol for verification link
     const protocol = req.protocol;
     const domain = req.get("host");
     const imageBuffer = req.file ? req.file.buffer : null;
@@ -20,9 +25,16 @@ export const register = async (req, res, next) => {
   }
 };
 
+/**
+ * Authenticate user login
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const login = async (req, res, next) => {
   try {
     const token = await userService.loginService(req.body);
+    
     return res.json({
       body: token,
       status: 200,
@@ -33,15 +45,18 @@ export const login = async (req, res, next) => {
   }
 };
 
+/**
+ * Verify user email address
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const verifyEmail = async (req, res, next) => {
   try {
     const email = req.params.email;
     await userService.verifyEmailService(email);
-    // return res.json({
-    //   status: 200,
-    //   message: "Email verified successfully!",
-    // });
-    // return html response that email is verified
+    
+    // Return HTML response for user-friendly email verification
     return res.send("<h1>Email verified successfully!</h1>");
   } catch (error) {
     next(error);
