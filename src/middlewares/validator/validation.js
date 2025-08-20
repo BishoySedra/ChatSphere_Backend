@@ -1,16 +1,24 @@
+/**
+ * Validation middleware factory function
+ * @param {Object} schema - Joi validation schema
+ * @param {boolean} isBody - Whether to validate request body (true) or params (false)
+ * @returns {Function} Express middleware function
+ */
 function validate(schema, isBody = true) {
   return async function (req, res, next) {
     try {
       let validatedResult;
-      if (isBody)
+      
+      if (isBody) {
         validatedResult = await schema.validateAsync(req.body, {
           abortEarly: false,
         });
-      else {
+      } else {
         validatedResult = await schema.validateAsync(req.params, {
           abortEarly: false,
         });
       }
+      
       next();
     } catch (error) {
       res.status(400).json({

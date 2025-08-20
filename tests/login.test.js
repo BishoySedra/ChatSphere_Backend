@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../index.js";
+import app from "../starter.js";
 import mongoose from "mongoose";
 import connetDB, { clearAllCollections } from "../src/db/connection.js";
 
