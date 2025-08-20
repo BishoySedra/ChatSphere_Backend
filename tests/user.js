@@ -12,7 +12,7 @@ class User {
   }
 
   register = async () => {
-    const res = await request(app).post(registerURL).send({
+    await request(app).post(registerURL).send({
       username: this.username,
       email: this.email,
       password: this.password,
@@ -30,49 +30,39 @@ class User {
     return res.body;
   };
 
-  async getToken() {
+  getToken = async () => {
     const res = await this.login();
-    const token = res.body;
-    return "Bearer " + token;
-  }
-
-  // make static method to send friend request
+    return "Bearer " + res.body;
+  };
 
   sendFriendRequest = async (receiverMail) => {
-    const senderMail = this.email;
-    const sendFriendRequestURL = `${process.env.BASE_URL}/users/${senderMail}/send/${receiverMail}`;
-   // console.log("send URL ", sendFriendRequestURL);
-    //console.log("TOKEN ", await this.getToken());
-    const res = await request(app)
+    const sendFriendRequestURL = `${process.env.BASE_URL}/users/${this.email}/send/${receiverMail}`;
+    await request(app)
       .post(sendFriendRequestURL)
       .set("Authorization", await this.getToken());
-    //console.log(`SEND ${this.email} ${receiverMail} ` + res.text);
   };
 
   respondToFriendRequest = async (senderMail, state) => {
-    const receiverMail = this.email;
-    const respondToFriendRequestURL = `${process.env.BASE_URL}/users/${receiverMail}/response/${senderMail}`;
-    const res = await request(app)
+    const respondToFriendRequestURL = `${process.env.BASE_URL}/users/${this.email}/response/${senderMail}`;
+    await request(app)
       .post(respondToFriendRequestURL)
       .set("Authorization", await this.getToken())
       .send({ status: state });
-    //console.log(`RESPOND ${this.email} ${senderMail} ` + res.text);
   };
 
   unfriend = async (friendEmail) => {
     const unfriendURL = `${process.env.BASE_URL}/users/${this.email}/unfriend/${friendEmail}`;
-    const res = await request(app)
+    await request(app)
       .patch(unfriendURL)
       .set("Authorization", await this.getToken());
   };
 
   getPrivateChats = async (mail = this.email) => {
     const privateChatsURL = `${process.env.BASE_URL}/chats/private/${mail}`;
-    const mfResponse = await request(app)
+    const response = await request(app)
       .get(privateChatsURL)
       .set("Authorization", await this.getToken());
-    return mfResponse.body.body[0]._id;
-    //console.log("GET" + mfResponse.text);
+    return response.body.body[0]._id;
   };
 
   createGroup = async (groupName, groupDescription) => {
@@ -82,15 +72,15 @@ class User {
       .set("Authorization", await this.getToken())
       .send({
         adminEmail: this.email,
-        groupName: groupName,
-        groupDescription: groupDescription,
+        groupName,
+        groupDescription,
       });
     return res.body.body;
   };
 
   addFriendToGroup = async (groupID, friendEmail) => {
     const addFriendToGroupURL = `${process.env.BASE_URL}/chats/groups/add-friend`;
-    const res = await request(app)
+    await request(app)
       .post(addFriendToGroupURL)
       .set("Authorization", await this.getToken())
       .send({
