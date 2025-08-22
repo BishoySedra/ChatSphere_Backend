@@ -18,7 +18,7 @@ fi
 
 echo "🔑 Creating/Updating Kubernetes Secret from .env..."
 kubectl delete secret $SECRET_NAME -n $NAMESPACE --ignore-not-found
-kubectl create secret generic $SECRET_NAME -n $NAMESPACE --from-env-file=.env
+kubectl create secret generic $SECRET_NAME -n $NAMESPACE --from-env-file=.deploy.env
 
 # 3. Apply Deployment & Service
 echo "⚙️ Applying Deployment and Service..."
