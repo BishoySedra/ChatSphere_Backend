@@ -33,7 +33,8 @@ export const register = async (req, res, next) => {
  */
 export const login = async (req, res, next) => {
   try {
-    const token = await userService.loginService(req.body);
+    const clientIp = req.ip || req.connection.remoteAddress;
+    const token = await userService.loginService(req.body, clientIp);
     
     return res.json({
       body: token,

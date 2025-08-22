@@ -16,11 +16,12 @@ const errorHandler = (error, req, res, next) => {
     });
   }
   
-  // Log unexpected errors for debugging
+  // Log unexpected errors for debugging (in production, use proper logging service)
   console.error("Unexpected error:", error);
   
+  // Return generic error message to prevent information disclosure
   return res.status(500).json({ 
-    message: "Internal server error!", 
+    message: "An unexpected error occurred. Please try again later.", 
     status: 500, 
     body: null 
   });

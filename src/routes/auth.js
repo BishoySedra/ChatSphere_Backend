@@ -3,6 +3,8 @@ import { Router } from "express";
 import * as authController from "../controllers/auth.js";
 import validate from "../middlewares/validator/validation.js";
 import * as userSchema from "../middlewares/validator/schemas/userSchema.js";
+import { authRateLimiter, strictRateLimiter } from "../middlewares/security/rateLimiter.js";
+import { checkAccountLockout } from "../middlewares/security/loginAttempts.js";
 
 // Initialize the router
 const router = Router();
@@ -60,6 +62,7 @@ const router = Router();
 // Route to register a new user
 router.post(
   "/register",
+  authRateLimiter,                      // Apply rate limiting for auth
   validate(userSchema.registerSchema), // Validate registration details
   authController.register              // Controller to handle the logic
 );
@@ -107,8 +110,10 @@ router.post(
 // Route to log in a user
 router.post(
   "/login",
-  validate(userSchema.loginSchema), // Validate login details
-  authController.login              // Controller to handle the logic
+  authRateLimiter,                   // Apply rate limiting for auth
+  checkAccountLockout,               // Check for account lockout
+  validate(userSchema.loginSchema),  // Validate login details
+  authController.login               // Controller to handle the logic
 );
 
 /**
@@ -140,6 +145,7 @@ router.post(
 // Route to verify a user's email
 router.get(
   "/verify/:email",
+  strictRateLimiter,                   // Apply strict rate limiting for verification
   validate(userSchema.emailSchema, false), // Validate email format
   authController.verifyEmail              // Controller to handle the logic
 );
