@@ -5,6 +5,8 @@ import User from "../db/models/user.js";
 import sendEmail from "../helpers/emailSending.js";
 import dotenv from "dotenv";
 import { uploadFile } from "./message.js";
+import { recordFailedAttempt, clearFailedAttempts } from "../middlewares/security/loginAttempts.js";
+import { sanitizeInput } from "../middlewares/security/sanitizer.js";
 
 dotenv.config();
 
@@ -72,45 +74,60 @@ export const registerService = async (userData, imageBuffer, domain, protocol) =
  * @param {Object} userData - User login data
  * @param {string} userData.email - User's email
  * @param {string} userData.password - User's password
+ * @param {string} clientIp - Client IP address for tracking failed attempts
  * @throws {CustomError} - If user not found, not verified, or invalid password
  * @returns {Promise<string>} - JWT token
  */
-export const loginService = async (userData) => {
+export const loginService = async (userData, clientIp = null) => {
   const { email, password } = userData;
 
-  // Check if user exists
-  const existedUser = await User.findOne({ email });
+  try {
+    // Check if user exists
+    const existedUser = await User.findOne({ email });
 
-  if (!existedUser) {
-    throw new createCustomError("Invalid Email!", 401, null);
+    if (!existedUser) {
+      if (clientIp) recordFailedAttempt(clientIp, email);
+      throw new createCustomError("Invalid credentials!", 401, null);
+    }
+
+    // Check if account is verified
+    if (!existedUser.isVerified) {
+      if (clientIp) recordFailedAttempt(clientIp, email);
+      throw new createCustomError("Account is not verified!", 401, null);
+    }
+
+    // Verify password
+    const isCorrectPassword = await bcrypt.comparePassword(
+      password,
+      existedUser.password
+    );
+
+    if (!isCorrectPassword) {
+      if (clientIp) recordFailedAttempt(clientIp, email);
+      throw new createCustomError("Invalid credentials!", 401, null);
+    }
+
+    // Clear failed attempts on successful login
+    if (clientIp) clearFailedAttempts(clientIp, email);
+
+    // Generate JWT token
+    const token = jwt.generateToken([
+      {
+        email: existedUser.email,
+      },
+      {
+        id: existedUser._id,
+      },
+    ]);
+
+    return token;
+  } catch (error) {
+    // Record failed attempt for any login error
+    if (clientIp && error.statusCode === 401) {
+      recordFailedAttempt(clientIp, email);
+    }
+    throw error;
   }
-
-  // Check if account is verified
-  if (!existedUser.isVerified) {
-    throw new createCustomError("Account is not verified!", 401, null);
-  }
-
-  // Verify password
-  const isCorrectPassword = await bcrypt.comparePassword(
-    password,
-    existedUser.password
-  );
-
-  if (!isCorrectPassword) {
-    throw new createCustomError("Invalid Password!", 401, null);
-  }
-
-  // Generate JWT token
-  const token = jwt.generateToken([
-    {
-      email: existedUser.email,
-    },
-    {
-      id: existedUser._id,
-    },
-  ]);
-
-  return token;
 };
 
 /**

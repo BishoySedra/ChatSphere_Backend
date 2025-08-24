@@ -4,6 +4,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
+import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
+import hpp from "hpp";
 
 // Application helpers and utilities
 import { configureEnvironmentVariable } from "./src/helpers/enviroment.js";
@@ -14,6 +17,8 @@ import { socketConnection } from "./src/helpers/sockets.js";
 // Middleware
 import errorHandler from "./src/middlewares/errors/errorHandler.js";
 import notFoundHandler from "./src/middlewares/errors/notFoundHandler.js";
+import { generalRateLimiter } from "./src/middlewares/security/rateLimiter.js";
+import { sanitizeMiddleware } from "./src/middlewares/security/sanitizer.js";
 
 // Routes
 import authRoutes from "./src/routes/auth.js";
@@ -27,6 +32,9 @@ dotenv.config();
 
 // Create app instance
 const app = new Express();
+
+// Trust proxy for correct IP addresses behind reverse proxy
+app.set('trust proxy', 1);
 
 // CORS Configuration
 const DEPLOYMENT_API_URL = process.env.DEPLOYMENT_API_URL;
@@ -45,7 +53,33 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(Express.json());
+
+// Security Middleware
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'"],
+            imgSrc: ["'self'", "data:", "https:"],
+            connectSrc: ["'self'"],
+            fontSrc: ["'self'"],
+            objectSrc: ["'none'"],
+            mediaSrc: ["'self'"],
+            frameSrc: ["'none'"],
+        },
+    },
+    crossOriginEmbedderPolicy: false
+}));
+
+app.use(mongoSanitize()); // Prevent NoSQL injection attacks
+app.use(hpp()); // Prevent HTTP Parameter Pollution attacks
+app.use(generalRateLimiter); // Apply general rate limiting
+app.use(sanitizeMiddleware); // Sanitize inputs to prevent XSS
+
+// Request parsing middleware with size limits
+app.use(Express.json({ limit: '10mb' })); // Limit JSON payload size
+app.use(Express.urlencoded({ extended: true, limit: '10mb' })); // Limit URL-encoded payload size
 app.use(fileUpload.single("imageMessage"));
 
 // Swagger setup
